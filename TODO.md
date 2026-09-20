@@ -91,6 +91,6 @@
 
 ### 3. Documentation & Packaging
 
-- [ ] Complete `docs/en_Silksong.md` with complete options documentation.
-- [ ] Complete `docs/setup_en.md` with step-by-step installation instructions.
-- [ ] Add build scripts to generate `.apworld` bundle and BepInEx client archive.
+- [x] Complete `docs/en_Silksong.md` with complete options documentation.
+- [x] Complete `docs/setup_en.md` with step-by-step installation instructions.
+- [x] Add build scripts to generate `.apworld` bundle and BepInEx client archive (`package_release.py`).

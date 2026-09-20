@@ -11,7 +11,9 @@ import asyncio
 from pathlib import Path
 import sys
 
-ap_dir = Path(r"c:\Users\Ulysse\Documents\GitHub\Archipelago")
+ap_dir = Path.home() / "Documents" / "GitHub" / "Archipelago"
+if not ap_dir.exists():
+    ap_dir = Path(__file__).resolve().parent.parent / "Archipelago"
 my_repo = Path(__file__).resolve().parent
 
 sys.path.insert(0, str(ap_dir))
@@ -33,6 +35,17 @@ logging.getLogger().addFilter(WorldLoadFilter())
 # Bypass module check for unrelated games
 import ModuleUpdate
 ModuleUpdate.update_ran = True
+
+# Ensure websockets compatibility for Archipelago
+import websockets
+try:
+    if hasattr(websockets, "asyncio") and hasattr(websockets.asyncio, "server"):
+        SC = getattr(websockets.asyncio.server, "ServerConnection", None)
+        if SC and not hasattr(SC, "open"):
+            SC.open = property(lambda self: getattr(self, "state", None) == 1)
+            SC.extensions = property(lambda self: [])
+except Exception:
+    pass
 
 import MultiServer
 

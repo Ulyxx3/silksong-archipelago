@@ -21,6 +21,7 @@ namespace SilksongArchipelago.UI
 
         private Rect _windowRect = new(20, 20, 360, 480);
         private readonly List<(string Message, Color TextColor, float Time)> _logs = new();
+        private readonly System.Collections.Concurrent.ConcurrentQueue<(string Message, Color Color)> _pendingLogs = new();
         private const int MaxLogs = 30;
 
         private GUIStyle? _titleStyle;
@@ -31,16 +32,20 @@ namespace SilksongArchipelago.UI
 
         public void AddLog(string message, Color? color = null)
         {
-            Color c = color ?? Color.white;
-            _logs.Add((message, c, Time.time));
-            if (_logs.Count > MaxLogs)
-            {
-                _logs.RemoveAt(0);
-            }
+            _pendingLogs.Enqueue((message, color ?? Color.white));
         }
 
         private void Update()
         {
+            while (_pendingLogs.TryDequeue(out var item))
+            {
+                _logs.Add((item.Message, item.Color, Time.time));
+                if (_logs.Count > MaxLogs)
+                {
+                    _logs.RemoveAt(0);
+                }
+            }
+
             if (Input.GetKeyDown(ToggleKey))
             {
                 IsVisible = !IsVisible;
@@ -116,7 +121,7 @@ namespace SilksongArchipelago.UI
             if (client != null && client.IsConnected)
             {
                 _statusStyle!.normal.textColor = Color.green;
-                GUILayout.Label($"● Connected to {client.CurrentHost}:{client.CurrentPort}", _statusStyle);
+                GUILayout.Label($"● Connected as '{client.SlotName}' ({client.CurrentHost}:{client.CurrentPort})", _statusStyle);
             }
             else
             {

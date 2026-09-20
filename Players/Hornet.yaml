@@ -1,0 +1,21 @@
+description: Silksong player configuration for Hornet
+name: Hornet
+game: Silksong
+
+Silksong:
+  goal: true_ending
+  progression_abilities: true
+  progression_tools: true
+  progression_skills: true
+  progression_crests: true
+  bosses: true
+  wishes: true
+  fleas: true
+  upgrades: true
+  vendors: true
+  collectibles: true
+  benchsanity: false
+  fast_travel: false
+  mapsanity: false
+  loresanity: false
+  hunters_journal: false

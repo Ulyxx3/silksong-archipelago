@@ -1,0 +1,10 @@
+description: Celeste (Open World) player configuration for Madeline
+name: Madeline
+game: Celeste (Open World)
+
+Celeste (Open World):
+  goal_area: the_summit_a
+  total_strawberries: 50
+  strawberries_required_percentage: 50
+
+accessibility: minimal
