@@ -17,11 +17,30 @@ my_repo = Path(__file__).resolve().parent
 sys.path.insert(0, str(ap_dir))
 sys.path.insert(0, str(my_repo))
 
+import logging
+import socket
+
+# Filter out import warnings for unrelated worlds
+class WorldLoadFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        msg = record.getMessage()
+        if "Could not load world" in msg:
+            return False
+        return True
+
+logging.getLogger().addFilter(WorldLoadFilter())
+
 # Bypass module check for unrelated games
 import ModuleUpdate
 ModuleUpdate.update_ran = True
 
 import MultiServer
+
+
+def is_port_in_use(port: int) -> bool:
+    """Check if the given port is already occupied."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(("127.0.0.1", port)) == 0
 
 
 def find_latest_seed() -> Path | None:
@@ -38,6 +57,12 @@ def main() -> None:
                         help="Path to .archipelago seed file (defaults to latest generated).")
     parser.add_argument("--port", type=int, default=38281, help="Port to listen on (default 38281).")
     args = parser.parse_args()
+
+    if is_port_in_use(args.port):
+        print(f"Error: Port {args.port} is already in use by another server or process!")
+        print("To terminate any existing background Python process, run in PowerShell:")
+        print("  Stop-Process -Name python3.13 -Force")
+        sys.exit(1)
 
     seed_file = args.seed or find_latest_seed()
     if not seed_file or not seed_file.exists():

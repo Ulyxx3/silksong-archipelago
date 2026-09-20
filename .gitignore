@@ -5,8 +5,9 @@
 # --- Raw Cartography Data ---
 cartography/data.json
 
-# --- Generated Multiworld Seeds ---
+# --- Generated Multiworld Seeds & Saves ---
 *.archipelago
+*.apsave
 *_spoiler.txt
 
 # --- Proprietary Game Assemblies ---
