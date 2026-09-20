@@ -1,0 +1,64 @@
+# ==============================================================================
+# Silksong Archipelago — Git Ignore Rules
+# ==============================================================================
+
+# --- Raw Cartography Data ---
+cartography/data.json
+
+# --- Proprietary Game Assemblies ---
+libs/*
+!libs/README.md
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.mypy_cache/
+
+# --- .NET & C# Build Outputs ---
+**/[Bb]in/
+**/[Oo]bj/
+[Bb]in/
+[Oo]bj/
+*.pdb
+*.dll
+!libs/README.md
+*.exe
+
+# --- Visual Studio / Rider / IDEs ---
+.vs/
+.idea/
+*.user
+*.userosv
+*.suo
+*.userprefs
+*.sln.docstates
+*.DotSettings.user
+*.pidb
+
+# --- OS Artifacts ---
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/

@@ -1,0 +1,296 @@
+[
+  {
+    "category_id": 13593,
+    "name": "Arcane Egg",
+    "group": "Collectibles",
+    "count": 1
+  },
+  {
+    "category_id": 13581,
+    "name": "Bone Scroll",
+    "group": "Collectibles",
+    "count": 4
+  },
+  {
+    "category_id": 13551,
+    "name": "Choral Commandment",
+    "group": "Collectibles",
+    "count": 4
+  },
+  {
+    "category_id": 13544,
+    "name": "Lost Flea",
+    "group": "Collectibles",
+    "count": 30
+  },
+  {
+    "category_id": 13545,
+    "name": "Mask Shard",
+    "group": "Collectibles",
+    "count": 20
+  },
+  {
+    "category_id": 13595,
+    "name": "Memento",
+    "group": "Collectibles",
+    "count": 11
+  },
+  {
+    "category_id": 13552,
+    "name": "Memory Locket",
+    "group": "Collectibles",
+    "count": 20
+  },
+  {
+    "category_id": 13594,
+    "name": "Psalm Cylinder",
+    "group": "Collectibles",
+    "count": 6
+  },
+  {
+    "category_id": 13592,
+    "name": "Rune Harp",
+    "group": "Collectibles",
+    "count": 3
+  },
+  {
+    "category_id": 13550,
+    "name": "Silk Heart",
+    "group": "Collectibles",
+    "count": 3
+  },
+  {
+    "category_id": 13548,
+    "name": "Spool Fragment",
+    "group": "Collectibles",
+    "count": 18
+  },
+  {
+    "category_id": 13580,
+    "name": "Weaver Effigy",
+    "group": "Collectibles",
+    "count": 3
+  },
+  {
+    "category_id": 13523,
+    "name": "Arena Battle",
+    "group": "Enemies",
+    "count": 30
+  },
+  {
+    "category_id": 13587,
+    "name": "Boss",
+    "group": "Enemies",
+    "count": 46
+  },
+  {
+    "category_id": 13579,
+    "name": "Journal Entry",
+    "group": "Enemies",
+    "count": 237
+  },
+  {
+    "category_id": 13569,
+    "name": "Ability",
+    "group": "Equipment",
+    "count": 11
+  },
+  {
+    "category_id": 13549,
+    "name": "Crest",
+    "group": "Equipment",
+    "count": 6
+  },
+  {
+    "category_id": 13568,
+    "name": "Silk Skill",
+    "group": "Equipment",
+    "count": 6
+  },
+  {
+    "category_id": 13567,
+    "name": "Tool",
+    "group": "Equipment",
+    "count": 56
+  },
+  {
+    "category_id": 13570,
+    "name": "Upgrade",
+    "group": "Equipment",
+    "count": 15
+  },
+  {
+    "category_id": 13585,
+    "name": "Area Map",
+    "group": "Items",
+    "count": 29
+  },
+  {
+    "category_id": 13561,
+    "name": "Craftmetal",
+    "group": "Items",
+    "count": 8
+  },
+  {
+    "category_id": 13555,
+    "name": "Pale Oil",
+    "group": "Items",
+    "count": 3
+  },
+  {
+    "category_id": 13554,
+    "name": "Rosary",
+    "group": "Items",
+    "count": 107
+  },
+  {
+    "category_id": 13559,
+    "name": "Rosary String",
+    "group": "Items",
+    "count": 34
+  },
+  {
+    "category_id": 13547,
+    "name": "Shard Bundle",
+    "group": "Items",
+    "count": 22
+  },
+  {
+    "category_id": 13560,
+    "name": "Shell Shards",
+    "group": "Items",
+    "count": 79
+  },
+  {
+    "category_id": 13563,
+    "name": "Silkeater",
+    "group": "Items",
+    "count": 10
+  },
+  {
+    "category_id": 13574,
+    "name": "Achievement",
+    "group": "Other",
+    "count": 52
+  },
+  {
+    "category_id": 13584,
+    "name": "Breakable Surface",
+    "group": "Other",
+    "count": 216
+  },
+  {
+    "category_id": 13572,
+    "name": "Easter Egg",
+    "group": "Other",
+    "count": 5
+  },
+  {
+    "category_id": 13576,
+    "name": "Lever",
+    "group": "Other",
+    "count": 58
+  },
+  {
+    "category_id": 13582,
+    "name": "Locked Door",
+    "group": "Other",
+    "count": 89
+  },
+  {
+    "category_id": 13573,
+    "name": "Lore",
+    "group": "Other",
+    "count": 80
+  },
+  {
+    "category_id": 13571,
+    "name": "Miscellaneous",
+    "group": "Other",
+    "count": 119
+  },
+  {
+    "category_id": 13583,
+    "name": "Needolin Door",
+    "group": "Other",
+    "count": 5
+  },
+  {
+    "category_id": 13577,
+    "name": "Shortcut",
+    "group": "Other",
+    "count": 26
+  },
+  {
+    "category_id": 13578,
+    "name": "Silk Wall",
+    "group": "Other",
+    "count": 2
+  },
+  {
+    "category_id": 13535,
+    "name": "Bellway Station",
+    "group": "Points of Interest",
+    "count": 12
+  },
+  {
+    "category_id": 13533,
+    "name": "Bench",
+    "group": "Points of Interest",
+    "count": 81
+  },
+  {
+    "category_id": 13527,
+    "name": "NPC",
+    "group": "Points of Interest",
+    "count": 146
+  },
+  {
+    "category_id": 13525,
+    "name": "Plasmium Cocoon",
+    "group": "Points of Interest",
+    "count": 4
+  },
+  {
+    "category_id": 13528,
+    "name": "Point of Interest",
+    "group": "Points of Interest",
+    "count": 11
+  },
+  {
+    "category_id": 13534,
+    "name": "Vendor",
+    "group": "Points of Interest",
+    "count": 23
+  },
+  {
+    "category_id": 13539,
+    "name": "Ventrica Station",
+    "group": "Points of Interest",
+    "count": 7
+  },
+  {
+    "category_id": 13529,
+    "name": "Void Mass",
+    "group": "Points of Interest",
+    "count": 46
+  },
+  {
+    "category_id": 13588,
+    "name": "Objective",
+    "group": "Quests",
+    "count": 21
+  },
+  {
+    "category_id": 13590,
+    "name": "Quest Item",
+    "group": "Quests",
+    "count": 66
+  },
+  {
+    "category_id": 13589,
+    "name": "Wish",
+    "group": "Quests",
+    "count": 48
+  }
+]

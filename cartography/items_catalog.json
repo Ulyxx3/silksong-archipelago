@@ -1,0 +1,1906 @@
+[
+  {
+    "name": "Beastling Call",
+    "category": "Ability",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Clawline",
+    "category": "Ability",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Cling Grip",
+    "category": "Ability",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Drifter's Cloak",
+    "category": "Ability",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Elegy of the Deep",
+    "category": "Ability",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Faydown Cloak",
+    "category": "Ability",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Needle Strike",
+    "category": "Ability",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Needolin",
+    "category": "Ability",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Silk Soar",
+    "category": "Ability",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Swift Step",
+    "category": "Ability",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Sylphsong",
+    "category": "Ability",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Arcane Egg",
+    "category": "Arcane Egg",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Arena Battle",
+    "category": "Arena Battle",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 29
+  },
+  {
+    "name": "Court of Craws",
+    "category": "Arena Battle",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Bone Scroll",
+    "category": "Bone Scroll",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 4
+  },
+  {
+    "name": "Bell Beast",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Bell Eater",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Broodmother",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Clover Dancers",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Cogwork Dancers",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Crawfather",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Crust King Khann",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Disgraced Chef Lugoli",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Father of the Flame",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "First Sinner",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Forebrothers Signis & Gron",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Fourth Chorus",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Grand Mother Silk",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Great Conchflies",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Groal The Great",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Gurr the Outcast",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Lace",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 2
+  },
+  {
+    "name": "Last Judge",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Lost Garmond",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Lost Lace",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Moorwing",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Moss Mother",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 2
+  },
+  {
+    "name": "Moss Mother x2",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Nyleth",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Palestag",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Phantom",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Pinstress",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Plasmified Zango",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Raging Conchfly",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Savage Beastfly",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 3
+  },
+  {
+    "name": "Second Sentinel",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shrine Guardian Seth",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Sister Splinter",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Skarrsinger Karmelita",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Skull Tyrant",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Skull Tyrant - Second Encounter",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Summoned Saviour",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "The Unravelled",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Tormented Trobbio",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Trobbio",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Voltvyrm",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Watcher at the Edge",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Widow",
+    "category": "Boss",
+    "group": "Enemies",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Choral Commandment",
+    "category": "Choral Commandment",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 4
+  },
+  {
+    "name": "Craftmetal",
+    "category": "Craftmetal",
+    "group": "Items",
+    "classification": "Filler",
+    "count": 8
+  },
+  {
+    "name": "Crest of Architect",
+    "category": "Crest",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Crest of Beast",
+    "category": "Crest",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Crest of Reaper",
+    "category": "Crest",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Crest of Shaman",
+    "category": "Crest",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Crest of Wanderer",
+    "category": "Crest",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Crest of Witch",
+    "category": "Crest",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Giant Lost Flea",
+    "category": "Lost Flea",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Kratt",
+    "category": "Lost Flea",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Lost Flea",
+    "category": "Lost Flea",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 27
+  },
+  {
+    "name": "Vog",
+    "category": "Lost Flea",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Mask Shard",
+    "category": "Mask Shard",
+    "group": "Collectibles",
+    "classification": "Useful",
+    "count": 20
+  },
+  {
+    "name": "Conjoined Heart",
+    "category": "Memento",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Craw Memento",
+    "category": "Memento",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Encrusted Heart",
+    "category": "Memento",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Grey Memento",
+    "category": "Memento",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Guardian's Memento",
+    "category": "Memento",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Hero's Memento",
+    "category": "Memento",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Hunter's Heart",
+    "category": "Memento",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Hunter's Memento",
+    "category": "Memento",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Pollen Heart",
+    "category": "Memento",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Sprintmaster Memento",
+    "category": "Memento",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Surface Memento",
+    "category": "Memento",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Memory Locket",
+    "category": "Memory Locket",
+    "group": "Collectibles",
+    "classification": "Useful",
+    "count": 20
+  },
+  {
+    "name": "Pale Oil",
+    "category": "Pale Oil",
+    "group": "Items",
+    "classification": "Filler",
+    "count": 3
+  },
+  {
+    "name": "Psalm Cylinder - Grindle",
+    "category": "Psalm Cylinder",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Psalm Cylinder - High Halls",
+    "category": "Psalm Cylinder",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Psalm Cylinder - Underworks",
+    "category": "Psalm Cylinder",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Psalm Cylinder - Vaultkeeper Cardinius Lair",
+    "category": "Psalm Cylinder",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Psalm Cylinder - Whispering Vaults",
+    "category": "Psalm Cylinder",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Sacred Cylinder",
+    "category": "Psalm Cylinder",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Architect's Key",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Bellhome Key",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Broodmother's Eye",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Cogheart Piece 1",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Cogheart Piece 2",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Cogheart Piece 3",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Courier's Rasher",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Craw Summons",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Crown Fragment",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Crustnut",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Diving Bell Key",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Everbloom",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Farsight",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Flintgem",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 3
+  },
+  {
+    "name": "Grass Doll",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Hermit's Soul",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Horn Fragment",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Hunter's Journal",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Key of Apostate",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Key of Heretic",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Key of Indolent",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Maiden's Soul",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Materium",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Mossberry",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 7
+  },
+  {
+    "name": "Mossberry Stew",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Pickled Muckmaggot",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Plasmium",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 3
+  },
+  {
+    "name": "Plasmium Gland",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Pollip Heart",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 6
+  },
+  {
+    "name": "Ruined Tool",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Seeker's Soul",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Silver Bell",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 11
+  },
+  {
+    "name": "Simple Key",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 4
+  },
+  {
+    "name": "Steel Spines",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Surgeon's Key",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Twisted Bud",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Vintage Nectar",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "White Key",
+    "category": "Quest Item",
+    "group": "Quests",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Rune Harp",
+    "category": "Rune Harp",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 3
+  },
+  {
+    "name": "Silk Heart",
+    "category": "Silk Heart",
+    "group": "Collectibles",
+    "classification": "Useful",
+    "count": 3
+  },
+  {
+    "name": "Cross Stitch",
+    "category": "Silk Skill",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Pale Nails",
+    "category": "Silk Skill",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Rune Rage",
+    "category": "Silk Skill",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Sharpdart",
+    "category": "Silk Skill",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Silkspear",
+    "category": "Silk Skill",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Thread Storm",
+    "category": "Silk Skill",
+    "group": "Equipment",
+    "classification": "Progression",
+    "count": 1
+  },
+  {
+    "name": "Spool Fragment",
+    "category": "Spool Fragment",
+    "group": "Collectibles",
+    "classification": "Useful",
+    "count": 18
+  },
+  {
+    "name": "Ascendant's Grip",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Barbed Bracelet",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Claw Mirror",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Cogfly",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Cogwork Wheel",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Compass",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Conchcutter",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Curveclaw",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Dark Mirror / Claw Mirrors",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Dead Bug's Purse",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Delver's Drill",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Druid's Eye",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Egg of Flealia",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Flea Brew",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Flintslate",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Fractured Mask",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Injector Band",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Longclaw",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Longpin",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Magma Bell",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Magnetite Brooch",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Magnetite Dice",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Memory Crystal",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Multibinder",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Pimpillo",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Pin Badge",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Plasmium Phial",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Pollip Pouch",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Quick Sling",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Reserve Bind",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Rosary Cannon",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Sawtooth Circlet",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Scuttlebrace",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Shard Pendant",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Shell Satchel",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Silkshot (Forge Daughter)",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Silkshot (Twelfth Architect)",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Silkshot (Weaver)",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Silkspeed Anklets",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Snare Setter",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Snitch Pick",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Spider Strings",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Spool Extender",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Sting Shard",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Straight Pin",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Tacks",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Thief's Mark",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Threefold Pin",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Throwing Ring",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Volt Filament",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Voltvessels",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Warding Bell",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Weavelight",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Weighted Belt",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Wispfire Lantern",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Wreath of Purity",
+    "category": "Tool",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Crafting Kit Upgrade",
+    "category": "Upgrade",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 4
+  },
+  {
+    "name": "Crest of Hunter Upgrade 1",
+    "category": "Upgrade",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Crest of Hunter Upgrade 2",
+    "category": "Upgrade",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Curvesickle",
+    "category": "Upgrade",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Druid's Eyes",
+    "category": "Upgrade",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Tool Pouch Upgrade",
+    "category": "Upgrade",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 4
+  },
+  {
+    "name": "Vesticrest",
+    "category": "Upgrade",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Vesticrest Upgrade",
+    "category": "Upgrade",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Weapon Upgrades",
+    "category": "Upgrade",
+    "group": "Equipment",
+    "classification": "Useful",
+    "count": 1
+  },
+  {
+    "name": "Forge Daughter",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Frey",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Grindle",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Jubilana",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Mort",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Mottled Skarr",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Pebb",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Bellhart",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Bilewater",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Blasted Steps",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Bone Bottom",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Deep Docks",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Far Fields",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Greymoor",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Hunter's March",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 2
+  },
+  {
+    "name": "Shakra - Mount Fay",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Sands of Karak",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Shellwood",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Sinner's Road",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - The Marrow",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Shakra - Wormways",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Twelfth Architect",
+    "category": "Vendor",
+    "group": "Points of Interest",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Weaver Effigy",
+    "category": "Weaver Effigy",
+    "group": "Collectibles",
+    "classification": "Filler",
+    "count": 3
+  },
+  {
+    "name": "A Lifesaving Bridge",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "A Vassal Lost",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Advanced Alchemy",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Alchemist's Assistant",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "An Icon of Hope",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Balm for The Wounded",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Bellhart's Glory",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Berry Picking",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Bone Bottom Repairs",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Broodfeast",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Bugs of Pharloom",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Building Up Songclave",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Cloaks of the Choir",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Crawbug Clearing",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Dark Hearts",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Ecstasy of the End",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Fastest in Pharloom",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Fatal Resolve",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Final Audience",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Fine Pins",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Flexile Spines",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Garb of the Pilgrims",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Great Taste of Pharloom",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Hero's Call",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Infestation Operation",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Liquid Lacquer",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "My Missing Brother",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "My Missing Courier",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Pain, Anguish and Misery",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Passing of the Age",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Pinmaster's Oil",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Queen's Egg",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Restoration of Bellhart",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Rite of Rebirth",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Rite of the Pollip",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Roach Guts",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Silk and Soul",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Silver Bells",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Strengthening Songclave",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "The Hidden Hunter",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "The Lost Fleas",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "The Lost Merchant",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "The Terrible Tyrant",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "The Wailing Mother",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "The Wandering Merchant",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Trail's End",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  },
+  {
+    "name": "Volatile Flintbeetles",
+    "category": "Wish",
+    "group": "Quests",
+    "classification": "Filler",
+    "count": 1
+  }
+]

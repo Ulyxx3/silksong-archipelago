@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>SilksongArchipelago</AssemblyName>
+    <RootNamespace>SilksongArchipelago</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <Version>0.1.0</Version>
+    <Authors>Ulyxx3</Authors>
+    <Description>
+      Archipelago Multiworld mod for Silksong using BepInEx and HarmonyX.
+    </Description>
+  </PropertyGroup>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- NuGet dependencies                                                 -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <ItemGroup>
+    <!-- Archipelago .NET client library -->
+    <PackageReference Include="Archipelago.MultiClient.Net" Version="6.*" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
+    <PackageReference Include="HarmonyX" Version="2.*" />
+  </ItemGroup>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- Silksong & Unity references from local libs/ directory             -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\libs\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\libs\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\libs\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
+

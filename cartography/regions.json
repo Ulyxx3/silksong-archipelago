@@ -1,0 +1,576 @@
+[
+  {
+    "name": "Bellhart",
+    "center_latitude": 0.7256569392706825,
+    "center_longitude": -0.7197298854588825,
+    "total_locations": 113,
+    "core_checks": 50,
+    "benches": [
+      "Bench - Bellhart",
+      "Bench - Bellhart"
+    ],
+    "fast_travel": [
+      "Bellway - Bellhart"
+    ]
+  },
+  {
+    "name": "Bilehaven",
+    "center_latitude": 0.86230837225921,
+    "center_longitude": -0.52839517593179,
+    "total_locations": 19,
+    "core_checks": 6,
+    "benches": [
+      "Bench - Bilehaven"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Bilewater",
+    "center_latitude": 0.8077157519807875,
+    "center_longitude": -0.5407635122547849,
+    "total_locations": 44,
+    "core_checks": 6,
+    "benches": [
+      "Bench - Bilewater",
+      "Bench - Bilewater"
+    ],
+    "fast_travel": [
+      "Bellway - Bilewater"
+    ]
+  },
+  {
+    "name": "Blasted Steps",
+    "center_latitude": 0.771587569072752,
+    "center_longitude": -0.871939480304038,
+    "total_locations": 50,
+    "core_checks": 14,
+    "benches": [
+      "Bench - Blasted Steps",
+      "Bench - Blasted Steps",
+      "Bench - Blasted Steps"
+    ],
+    "fast_travel": [
+      "Bellway - Blasted Steps"
+    ]
+  },
+  {
+    "name": "Bone Bottom",
+    "center_latitude": 0.6699163273592701,
+    "center_longitude": -0.8369898408972449,
+    "total_locations": 39,
+    "core_checks": 15,
+    "benches": [
+      "Bench - Bone Bottom"
+    ],
+    "fast_travel": [
+      "Bellway - Bone Bottom"
+    ]
+  },
+  {
+    "name": "Choral Chambers",
+    "center_latitude": 0.8444900430106933,
+    "center_longitude": -0.7232714269133717,
+    "total_locations": 38,
+    "core_checks": 3,
+    "benches": [
+      "Bench - Choral Chambers",
+      "Bench - Choral Chambers",
+      "Bench - Choral Chambers"
+    ],
+    "fast_travel": [
+      "Ventrica Station - Choral Chambers"
+    ]
+  },
+  {
+    "name": "Citadel Spa",
+    "center_latitude": 0.85140909377608,
+    "center_longitude": -0.7410192489595,
+    "total_locations": 38,
+    "core_checks": 4,
+    "benches": [
+      "Bench - Citadel Spa"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Cogwork Core",
+    "center_latitude": 0.8758077182329149,
+    "center_longitude": -0.68423286080346,
+    "total_locations": 36,
+    "core_checks": 5,
+    "benches": [
+      "Bench - Cogwork Core"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Coral Tower",
+    "center_latitude": 0.83885503923543,
+    "center_longitude": -0.92590391635784,
+    "total_locations": 40,
+    "core_checks": 10,
+    "benches": [
+      "Bench - Coral Tower"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Deep Docks",
+    "center_latitude": 0.65571770306778,
+    "center_longitude": -0.6643228232860775,
+    "total_locations": 80,
+    "core_checks": 17,
+    "benches": [
+      "Bench - Deep Docks",
+      "Bench - Deep Docks",
+      "Bench - Deep Docks",
+      "Bench - Deep Docks",
+      "Bench - Deep Docks",
+      "Bench - Deep Docks"
+    ],
+    "fast_travel": [
+      "Bellway - Deep Docks"
+    ]
+  },
+  {
+    "name": "Exhaust Organ",
+    "center_latitude": 0.79266403674973,
+    "center_longitude": -0.60043394565534,
+    "total_locations": 31,
+    "core_checks": 6,
+    "benches": [
+      "Bench - Exhaust Organ"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Far Fields",
+    "center_latitude": 0.6797891257197014,
+    "center_longitude": -0.5458107590676972,
+    "total_locations": 71,
+    "core_checks": 14,
+    "benches": [
+      "Bench - Far Fields",
+      "Bench - Far Fields",
+      "Bench - Far Fields",
+      "Bench - Far Fields",
+      "Bench - Far Fields"
+    ],
+    "fast_travel": [
+      "Bellway - Far Fields"
+    ]
+  },
+  {
+    "name": "First Shrine",
+    "center_latitude": 0.8795945519060451,
+    "center_longitude": -0.620353370904895,
+    "total_locations": 25,
+    "core_checks": 13,
+    "benches": [
+      "Bench - First Shrine"
+    ],
+    "fast_travel": [
+      "Ventrica Station - First Shrine"
+    ]
+  },
+  {
+    "name": "Flea Caravan",
+    "center_latitude": 0.76079141686087,
+    "center_longitude": -0.75334936380328,
+    "total_locations": 59,
+    "core_checks": 18,
+    "benches": [
+      "Temporary Bench - Flea Caravan",
+      "Temporary Bench - Flea Caravan"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Fleatopia",
+    "center_latitude": 0.87163602726049,
+    "center_longitude": -0.46904057264456,
+    "total_locations": 31,
+    "core_checks": 7,
+    "benches": [
+      "Bench - Fleatopia"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Grand Bellway",
+    "center_latitude": 0.83624731664616,
+    "center_longitude": -0.63731074333332,
+    "total_locations": 55,
+    "core_checks": 13,
+    "benches": [
+      "Bench - Grand Bellway"
+    ],
+    "fast_travel": [
+      "Bellway - Grand Bellway",
+      "Ventrica Station - Grand Bellway"
+    ]
+  },
+  {
+    "name": "Grand Gate",
+    "center_latitude": 0.79991602949951,
+    "center_longitude": -0.7848358154306,
+    "total_locations": 38,
+    "core_checks": 6,
+    "benches": [],
+    "fast_travel": []
+  },
+  {
+    "name": "Greymoor",
+    "center_latitude": 0.7348333730323651,
+    "center_longitude": -0.57634297623346,
+    "total_locations": 46,
+    "core_checks": 7,
+    "benches": [
+      "Temporary Bench - Greymoor",
+      "Bench - Greymoor"
+    ],
+    "fast_travel": [
+      "Bellway - Greymoor"
+    ]
+  },
+  {
+    "name": "Halfway Home",
+    "center_latitude": 0.73883422946335,
+    "center_longitude": -0.62859177589419,
+    "total_locations": 47,
+    "core_checks": 8,
+    "benches": [
+      "Bench - Halfway Home"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "High Halls",
+    "center_latitude": 0.8845511349090766,
+    "center_longitude": -0.6930094957363234,
+    "total_locations": 43,
+    "core_checks": 8,
+    "benches": [
+      "Bench - High Halls"
+    ],
+    "fast_travel": [
+      "Ventrica Station - High Halls"
+    ]
+  },
+  {
+    "name": "Hunter's March",
+    "center_latitude": 0.6968891119783549,
+    "center_longitude": -0.6215241551421951,
+    "total_locations": 67,
+    "core_checks": 14,
+    "benches": [
+      "TRAPPED Bench - Hunter's March"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Memorium",
+    "center_latitude": 0.8924690165886799,
+    "center_longitude": -0.6449949570960033,
+    "total_locations": 41,
+    "core_checks": 6,
+    "benches": [
+      "Bench - Memorium"
+    ],
+    "fast_travel": [
+      "Ventrica Station - Memorium"
+    ]
+  },
+  {
+    "name": "Mosshome",
+    "center_latitude": 0.69370556550288,
+    "center_longitude": -0.821598172187195,
+    "total_locations": 27,
+    "core_checks": 6,
+    "benches": [
+      "Bench - Mosshome",
+      "Bench - Mosshome"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Mosslands",
+    "center_latitude": 0.68891414964877,
+    "center_longitude": -0.81833660602607,
+    "total_locations": 20,
+    "core_checks": 7,
+    "benches": [],
+    "fast_travel": []
+  },
+  {
+    "name": "Mount Fay",
+    "center_latitude": 0.872425781030856,
+    "center_longitude": -0.8673811759904119,
+    "total_locations": 38,
+    "core_checks": 10,
+    "benches": [
+      "Bench - Mount Fay",
+      "Bench - Mount Fay",
+      "Bench - Mount Fay",
+      "Temporary Bench - Mount Fay"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Pilgrim's Rest",
+    "center_latitude": 0.68811490907257,
+    "center_longitude": -0.55724501609734,
+    "total_locations": 38,
+    "core_checks": 9,
+    "benches": [
+      "Bench - Pilgrim's Rest"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Putrified Ducts",
+    "center_latitude": 0.8823810312067175,
+    "center_longitude": -0.5395598709573826,
+    "total_locations": 28,
+    "core_checks": 4,
+    "benches": [
+      "Bench - Putrified Ducts",
+      "Bench - Putrified Ducts"
+    ],
+    "fast_travel": [
+      "Bellway - Putrified Ducts"
+    ]
+  },
+  {
+    "name": "Ruined Chapel",
+    "center_latitude": 0.6633316804945251,
+    "center_longitude": -0.87393477559148,
+    "total_locations": 49,
+    "core_checks": 12,
+    "benches": [
+      "Bench - Ruined Chapel",
+      "Bench - Ruined Chapel"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Sands of Karak",
+    "center_latitude": 0.8153224478639349,
+    "center_longitude": -0.847329944370825,
+    "total_locations": 41,
+    "core_checks": 6,
+    "benches": [
+      "Bench - Sands of Karak"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Shellwood",
+    "center_latitude": 0.7293453345055233,
+    "center_longitude": -0.806309352676385,
+    "total_locations": 47,
+    "core_checks": 8,
+    "benches": [
+      "Bench - Shellwood",
+      "Bench - Shellwood",
+      "Bench - Shellwood",
+      "Bench - Shellwood"
+    ],
+    "fast_travel": [
+      "Bellway - Shellwood"
+    ]
+  },
+  {
+    "name": "Sinner's Road",
+    "center_latitude": 0.7668726765376933,
+    "center_longitude": -0.5786206950783966,
+    "total_locations": 45,
+    "core_checks": 10,
+    "benches": [
+      "Bench - Sinner's Road",
+      "Bench - Sinner's Road"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Slab",
+    "center_latitude": 0.86866984618952,
+    "center_longitude": -0.79548686742714,
+    "total_locations": 22,
+    "core_checks": 6,
+    "benches": [],
+    "fast_travel": []
+  },
+  {
+    "name": "Songclave",
+    "center_latitude": 0.8767021303867,
+    "center_longitude": -0.62166899442832,
+    "total_locations": 18,
+    "core_checks": 8,
+    "benches": [
+      "Bench - Songclave"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Terminus",
+    "center_latitude": 0.935169657215,
+    "center_longitude": -0.66302061081009,
+    "total_locations": 9,
+    "core_checks": 1,
+    "benches": [],
+    "fast_travel": [
+      "Ventrica Station - Terminus"
+    ]
+  },
+  {
+    "name": "The Abyss",
+    "center_latitude": 0.5901338604410851,
+    "center_longitude": -0.6742879003286599,
+    "total_locations": 29,
+    "core_checks": 6,
+    "benches": [
+      "Bench - The Abyss",
+      "Temporary Bench - The Abyss",
+      "Bench - The Abyss"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "The Cradle",
+    "center_latitude": 0.9520493114631566,
+    "center_longitude": -0.6773752704763166,
+    "total_locations": 36,
+    "core_checks": 5,
+    "benches": [
+      "Bench - The Cradle",
+      "Bench - The Cradle"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "The Marrow",
+    "center_latitude": 0.6839564351240751,
+    "center_longitude": -0.7835008710183816,
+    "total_locations": 64,
+    "core_checks": 11,
+    "benches": [
+      "Bench - The Marrow",
+      "Temporary Bench - The Marrow",
+      "Bench - The Marrow",
+      "Bench - The Marrow"
+    ],
+    "fast_travel": [
+      "Bellway - The Marrow"
+    ]
+  },
+  {
+    "name": "The Slab",
+    "center_latitude": 0.865262179939136,
+    "center_longitude": -0.8207543492315781,
+    "total_locations": 51,
+    "core_checks": 8,
+    "benches": [
+      "Bench - The Slab",
+      "Bench - The Slab",
+      "Bench - The Slab",
+      "Bench - The Slab"
+    ],
+    "fast_travel": [
+      "Bellway - The Slab"
+    ]
+  },
+  {
+    "name": "Underworks",
+    "center_latitude": 0.797334910749374,
+    "center_longitude": -0.721279799938188,
+    "total_locations": 52,
+    "core_checks": 9,
+    "benches": [
+      "Bench - Underworks",
+      "Bench - Underworks",
+      "Bench - Underworks"
+    ],
+    "fast_travel": [
+      "Ventrica Station - Underworks"
+    ]
+  },
+  {
+    "name": "Verdania",
+    "center_latitude": 0.73951545385963,
+    "center_longitude": -0.45053333044113497,
+    "total_locations": 48,
+    "core_checks": 9,
+    "benches": [
+      "Bench - Verdania"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Weavenest Atla",
+    "center_latitude": 0.650729029778885,
+    "center_longitude": -0.81508802725305,
+    "total_locations": 26,
+    "core_checks": 7,
+    "benches": [
+      "Bench - Weavenest Atla"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Weavenest Cindril",
+    "center_latitude": 0.65392981803113,
+    "center_longitude": -0.46641469001867,
+    "total_locations": 25,
+    "core_checks": 5,
+    "benches": [
+      "Bench - Weavenest Cindril"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Whispering Vaults",
+    "center_latitude": 0.8568891014999234,
+    "center_longitude": -0.5995130538926366,
+    "total_locations": 45,
+    "core_checks": 7,
+    "benches": [
+      "Bench - Whispering Vaults",
+      "Bench - Whispering Vaults"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Whiteward",
+    "center_latitude": 0.83188605359953,
+    "center_longitude": -0.694666653870925,
+    "total_locations": 42,
+    "core_checks": 13,
+    "benches": [
+      "Bench - Whiteward"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Wisp Thicket",
+    "center_latitude": 0.7645999935291,
+    "center_longitude": -0.66384974961201,
+    "total_locations": 42,
+    "core_checks": 8,
+    "benches": [
+      "Bench - Wisp Thicket"
+    ],
+    "fast_travel": []
+  },
+  {
+    "name": "Wormways",
+    "center_latitude": 0.70761328764656,
+    "center_longitude": -0.895229425390685,
+    "total_locations": 46,
+    "core_checks": 16,
+    "benches": [
+      "Bench - Wormways"
+    ],
+    "fast_travel": []
+  }
+]
