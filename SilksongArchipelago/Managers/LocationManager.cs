@@ -65,5 +65,11 @@ namespace SilksongArchipelago.Managers
         public bool IsLocationChecked(long locationId) => _checkedLocations.Contains(locationId);
 
         public IReadOnlyCollection<long> GetAllCheckedLocations() => _checkedLocations;
+
+        public void Clear()
+        {
+            _checkedLocations.Clear();
+            _pendingLocations.Clear();
+        }
     }
 }

@@ -144,11 +144,13 @@ namespace SilksongArchipelago
             var pd = PlayerData.instance;
             if (pd != null)
             {
-                // If a fresh new game is loaded in Slot 4 (playTime < 2s) but ReceivedIndex > 0, reset index
-                if (pd.playTime < 2.0f && SaveManager.CurrentSave.ReceivedIndex > 0)
+                // If a fresh new game is loaded in Slot 4 (playTime < 2s) but ReceivedIndex > 0 or CheckedLocations > 0, reset state
+                if (pd.playTime < 2.0f && (SaveManager.CurrentSave.ReceivedIndex > 0 || SaveManager.CurrentSave.CheckedLocations.Count > 0))
                 {
-                    Log.LogInfo("Fresh save slot detected! Resetting Archipelago ReceivedIndex to 0.");
+                    Log.LogInfo("Fresh save slot detected! Resetting Archipelago state (ReceivedIndex and CheckedLocations).");
                     SaveManager.CurrentSave.ReceivedIndex = 0;
+                    SaveManager.CurrentSave.CheckedLocations.Clear();
+                    LocationManager.Clear();
                     ItemManager.SetReceivedIndex(0);
                     SaveManager.Save();
                 }
