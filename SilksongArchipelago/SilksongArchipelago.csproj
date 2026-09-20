@@ -6,6 +6,7 @@
     <RootNamespace>SilksongArchipelago</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Version>0.1.0</Version>
     <Authors>Ulyxx3</Authors>
     <Description>
