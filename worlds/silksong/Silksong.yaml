@@ -1,0 +1,32 @@
+# Player Configuration YAML for Hollow Knight: Silksong
+# Place this file in your Archipelago 'Players/' folder to generate a game.
+
+name: Hornet
+game: Silksong
+description: Silksong Archipelago Multiworld Settings
+
+Silksong:
+  # Progression / Goal Condition
+  # act_2: Reach Act 2 (Defeat Phantom or Last Judge)
+  # act_3: Complete Act 2 and reach Act 3
+  # true_ending: Defeat Lost Lace in Act 3
+  goal: true_ending
+
+  # Core Checks (Enabled by default)
+  randomize_abilities: true
+  randomize_tools: true
+  randomize_skills: true
+  randomize_crests: true
+  randomize_bosses: true
+  randomize_wishes: true
+  randomize_fleas: true
+  randomize_upgrades: true
+  randomize_vendors: true
+  randomize_collectibles: true
+
+  # Optional Sanities (Disabled by default)
+  bench_sanity: false
+  fast_travel_sanity: false
+  map_sanity: false
+  lore_sanity: false
+  journal_sanity: false

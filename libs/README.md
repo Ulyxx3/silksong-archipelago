@@ -7,5 +7,8 @@ To build the project locally, copy the following DLLs from your Hollow Knight: S
 - `Assembly-CSharp.dll`
 - `UnityEngine.dll`
 - `UnityEngine.CoreModule.dll`
+- `UnityEngine.IMGUIModule.dll`
+- `UnityEngine.TextRenderingModule.dll`
+- `UnityEngine.InputLegacyModule.dll`
 
 > **Note**: Game assemblies are proprietary and copyrighted by Team Cherry and Unity Technologies. They are excluded from version control via `.gitignore` and must never be committed to the repository.

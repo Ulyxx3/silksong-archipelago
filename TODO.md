@@ -68,7 +68,7 @@
 - [x] **Location Detection (`Managers/LocationManager.cs` & `Patches/`)**
   - [x] Hook into item pickup triggers (`Patch_CollectableItemPickup_DoPickupAction`).
   - [x] Hook into boss defeat handlers (`Patch_HealthManager_Die`).
-  - [ ] Generate comprehensive in-game location ID mapping table (`scene + name -> locationId`).
+  - [x] Generate comprehensive in-game location ID mapping table (`scene + name -> locationId` in `LocationMapping.cs`).
   - [x] Cache unsent location checks when disconnected and send on reconnect.
 - [x] **Item Receiving (`Managers/ItemManager.cs`)**
   - [x] Map AP item IDs to game actions (grant abilities, tools, crests, mask shards in `PlayerData`).
@@ -82,10 +82,10 @@
   - [ ] Hook Act 3 transition scene event.
   - [x] Hook Lost Lace defeat (True Ending).
   - [x] Send `StatusUpdate(CLIENT_GOAL)` via `SetGoalAchieved()`.
-- [ ] **In-Game Notifications & UI**
-  - [ ] Display connection status HUD overlay.
-  - [ ] Interactive connection menu (Host, Port, Slot, Password).
-  - [ ] Show notification banner / toast when items are sent or received.
+- [x] **In-Game Notifications & UI (`UI/ArchipelagoUI.cs`)**
+  - [x] Display connection status HUD overlay (toggleable with `F2`).
+  - [x] Interactive connection menu (Host, Port, Slot, Password).
+  - [x] Show notification banner / toast when items are sent or received.
 
 ---
 

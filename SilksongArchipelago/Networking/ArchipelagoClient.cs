@@ -32,6 +32,21 @@ namespace SilksongArchipelago.Networking
         public int TeamIndex => _session?.ConnectionInfo.Team ?? 0;
         public Dictionary<string, object> SlotData { get; private set; } = new();
 
+        public string CurrentHost { get; private set; } = "localhost";
+        public int CurrentPort { get; private set; } = 38281;
+
+        /// <summary>
+        /// Connect using host and port.
+        /// </summary>
+        public void Connect(string host, int port, string slotName, string? password = null)
+        {
+            CurrentHost = host;
+            CurrentPort = port;
+            string protocol = host.StartsWith("ws://") || host.StartsWith("wss://") ? "" : "ws://";
+            string url = $"{protocol}{host}:{port}";
+            _ = ConnectAsync(url, slotName, password ?? "");
+        }
+
         /// <summary>
         /// Attempt to connect to an Archipelago server.
         /// </summary>

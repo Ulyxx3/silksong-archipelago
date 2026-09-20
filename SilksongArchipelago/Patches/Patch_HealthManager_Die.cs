@@ -1,4 +1,5 @@
 using HarmonyLib;
+using SilksongArchipelago.Managers;
 
 namespace SilksongArchipelago.Patches
 {
@@ -14,6 +15,14 @@ namespace SilksongArchipelago.Patches
             string enemyName = __instance.gameObject.name;
 
             SilksongArchipelagoPlugin.Log.LogInfo($"Entity defeated: '{enemyName}'");
+
+            // Boss check reporting
+            if (LocationMapping.TryGetBossLocation(enemyName, out long bossLocId))
+            {
+                SilksongArchipelagoPlugin.Log.LogInfo(
+                    $"Boss location check detected for '{enemyName}': Location ID {bossLocId}");
+                SilksongArchipelagoPlugin.Instance?.LocationManager.CheckLocation(bossLocId);
+            }
 
             // Goal detection
             var client = SilksongArchipelagoPlugin.Instance?.ArchipelagoClient;

@@ -1,4 +1,5 @@
 using HarmonyLib;
+using SilksongArchipelago.Managers;
 
 namespace SilksongArchipelago.Patches
 {
@@ -16,11 +17,20 @@ namespace SilksongArchipelago.Patches
 
             string itemName = __instance.Item != null ? __instance.Item.name : "";
             string sceneName = __instance.gameObject.scene.name ?? "";
+            string objectName = __instance.gameObject.name ?? "";
 
             SilksongArchipelagoPlugin.Log.LogInfo(
-                $"Item picked up: '{itemName}' in scene '{sceneName}'");
+                $"Item picked up: '{itemName}', object: '{objectName}' in scene '{sceneName}'");
 
-            // TODO: Match sceneName and itemName to mapped Archipelago Location ID
+            if (LocationMapping.TryGetPickupLocation(sceneName, itemName, objectName, out long locationId))
+            {
+                SilksongArchipelagoPlugin.Instance?.LocationManager.CheckLocation(locationId);
+            }
+            else
+            {
+                SilksongArchipelagoPlugin.Log.LogWarning(
+                    $"No matching Archipelago location found for item '{itemName}' in scene '{sceneName}'");
+            }
         }
     }
 }

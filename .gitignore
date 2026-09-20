@@ -5,6 +5,10 @@
 # --- Raw Cartography Data ---
 cartography/data.json
 
+# --- Generated Multiworld Seeds ---
+*.archipelago
+*_spoiler.txt
+
 # --- Proprietary Game Assemblies ---
 libs/*
 !libs/README.md

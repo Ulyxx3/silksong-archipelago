@@ -8,7 +8,9 @@ namespace SilksongArchipelago.Managers
 {
     public class SaveData
     {
-        public string ServerUrl { get; set; } = "archipelago.gg:38281";
+        public string ServerUrl { get; set; } = "localhost:38281";
+        public string Host { get; set; } = "localhost";
+        public int Port { get; set; } = 38281;
         public string SlotName { get; set; } = "";
         public string Password { get; set; } = "";
         public int ReceivedIndex { get; set; } = 0;

@@ -71,5 +71,39 @@ The compiled plugin will be located at:
 
 ---
 
+## 3. 🚀 Quickstart: Testing In-Game
+
+Follow these simple steps to test Archipelago live in Silksong:
+
+### Step 1: Generate a Seed
+```bash
+py -3.13 generate_seed.py
+```
+This command:
+- Uses `worlds/silksong/Silksong.yaml` settings.
+- Verifies full accessibility and beatability of the goal.
+- Generates `AP_<seed>_<player>.archipelago` and a spoiler log `AP_<seed>_<player>_spoiler.txt`.
+
+### Step 2: Start the Archipelago Server
+```bash
+py -3.13 run_server.py
+```
+The server will start on port `38281` and listen for connections.
+
+### Step 3: Install the Mod to Silksong
+1. Ensure **BepInEx 5** is installed in your Silksong game folder.
+2. Copy `SilksongArchipelago/bin/Debug/netstandard2.1/SilksongArchipelago.dll` into your game's `BepInEx/plugins/` directory.
+3. Also copy `Archipelago.MultiClient.Net.dll` (from `SilksongArchipelago/bin/Debug/netstandard2.1/`) into `BepInEx/plugins/`.
+
+### Step 4: Play & Connect!
+1. Launch Hollow Knight: Silksong.
+2. In-game or in the title screen, press **F2** to bring up the **Archipelago Multiworld Menu**.
+3. Verify the settings (Default: `Host: localhost`, `Port: 38281`, `Slot: Hornet`).
+4. Click **Connect**.
+5. Once connected (`● Connected`), enjoy the game! Received items and checked locations appear in real-time on screen as floating toast notifications and are logged to the in-game console.
+
+---
+
 ## License & Fair Use
 Hollow Knight: Silksong and all related assets, names, and code are property of **Team Cherry**. This project is a community-developed mod designed for fair-use interoperability with the open-source Archipelago Multiworld platform.
+
