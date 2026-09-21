@@ -211,15 +211,7 @@ namespace SilksongRandomizer.Patches
 
         internal static bool HasOfflineLoadableSave()
         {
-            for (int slot = 1; slot <= 4; slot++)
-            {
-                if (CanLoad(slot, out _))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return CanLoad(Patch_DedicatedSaveSlot.ArchipelagoSlotIndex, out _);
         }
 
         private static string GetWorldVersionBindingError(
@@ -415,8 +407,13 @@ namespace SilksongRandomizer.Patches
     )]
     internal static class RestoreTemporaryTrapBeforeSavePatch
     {
-        private static void Prefix()
+        private static void Prefix(int __0)
         {
+            if (__0 != Patch_DedicatedSaveSlot.ArchipelagoSlotIndex)
+            {
+                return;
+            }
+
             SlabCaptureWarpSafety.PrepareForSave();
             TrapManager.PrepareForSave();
             BellhomePhaseManager.EnsureBellhomeUnlocked();
@@ -425,8 +422,13 @@ namespace SilksongRandomizer.Patches
         private static readonly MethodInfo ClonePlayerData =
             AccessTools.Method(typeof(object), "MemberwiseClone");
 
-        private static void Postfix(SaveGameData __result)
+        private static void Postfix(SaveGameData __result, int __0)
         {
+            if (__0 != Patch_DedicatedSaveSlot.ArchipelagoSlotIndex)
+            {
+                return;
+            }
+
             if (TrapManager.HasCursedCrestSaveSnapshot ||
                 NakedTrapManager.HasState)
             {
@@ -442,6 +444,13 @@ namespace SilksongRandomizer.Patches
     {
         private static bool Prefix(out bool __state)
         {
+            if (GameManager.instance != null && GameManager.instance.profileID != Patch_DedicatedSaveSlot.ArchipelagoSlotIndex)
+            {
+                __state = false;
+                SaveState.Instance = null;
+                return true;
+            }
+
             __state = Archipelago.Instance != null && Archipelago.Instance.Connected;
             if (__state)
             {
@@ -473,6 +482,11 @@ namespace SilksongRandomizer.Patches
     {
         private static bool Prefix()
         {
+            if (GameManager.instance != null && GameManager.instance.profileID != Patch_DedicatedSaveSlot.ArchipelagoSlotIndex)
+            {
+                return true;
+            }
+
             if (Archipelago.Instance != null && Archipelago.Instance.Connected)
             {
                 return true;
@@ -491,6 +505,11 @@ namespace SilksongRandomizer.Patches
     {
         private static bool Prefix(int saveSlot, Action<bool> callback)
         {
+            if (saveSlot != Patch_DedicatedSaveSlot.ArchipelagoSlotIndex)
+            {
+                return true;
+            }
+
             if (SavePatches.CanLoad(saveSlot, out string error))
             {
                 return true;
@@ -508,6 +527,12 @@ namespace SilksongRandomizer.Patches
         private static bool Prefix(int saveSlot, out bool __state)
         {
             __state = false;
+            if (saveSlot != Patch_DedicatedSaveSlot.ArchipelagoSlotIndex)
+            {
+                SaveState.Instance = null;
+                return true;
+            }
+
             if (SavePatches.CanLoad(saveSlot, out string error))
             {
                 __state = true;
@@ -537,6 +562,11 @@ namespace SilksongRandomizer.Patches
 
         private static void Prefix(int slotIndex, ref Action<bool> callback)
         {
+            if (slotIndex != Patch_DedicatedSaveSlot.ArchipelagoSlotIndex)
+            {
+                return;
+            }
+
             Action<bool> originalCallback = callback;
             callback = successful =>
             {
@@ -556,7 +586,7 @@ namespace SilksongRandomizer.Patches
 
         private static void Postfix(int __0, ref string __result)
         {
-            if (!string.IsNullOrEmpty(__result))
+            if (__0 == Patch_DedicatedSaveSlot.ArchipelagoSlotIndex && !string.IsNullOrEmpty(__result))
             {
                 __result = __result.Replace(SavePatches.VanillaExtension, SavePatches.SaveExtension);
             }
@@ -568,6 +598,11 @@ namespace SilksongRandomizer.Patches
     {
         private static void Prefix(int slotIndex, ref Action<bool> callback)
         {
+            if (slotIndex != Patch_DedicatedSaveSlot.ArchipelagoSlotIndex)
+            {
+                return;
+            }
+
             Action<bool> originalCallback = callback;
             callback = successful =>
             {
@@ -593,9 +628,10 @@ namespace SilksongRandomizer.Patches
             );
         }
 
-        private static void Postfix(ref string __result)
+        private static void Postfix(int __0, ref string __result)
         {
-            if (!string.IsNullOrEmpty(__result) &&
+            if (__0 == Patch_DedicatedSaveSlot.ArchipelagoSlotIndex &&
+                !string.IsNullOrEmpty(__result) &&
                 !__result.StartsWith("Randomizer_", StringComparison.Ordinal))
             {
                 __result = "Randomizer_" + __result;
@@ -615,13 +651,23 @@ namespace SilksongRandomizer.Patches
             );
         }
 
-        private static void Postfix(ref string __result)
+        private static void Postfix(int __0, ref string __result)
         {
-            if (!string.IsNullOrEmpty(__result) &&
+            if (__0 == Patch_DedicatedSaveSlot.ArchipelagoSlotIndex &&
+                !string.IsNullOrEmpty(__result) &&
                 !__result.StartsWith("randomizer_", StringComparison.Ordinal))
             {
                 __result = "randomizer_" + __result;
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(GameManager), nameof(GameManager.ReturnToMainMenu))]
+    internal static class ReturnToMainMenuPatch
+    {
+        private static void Postfix()
+        {
+            SaveState.Instance = null;
         }
     }
 }
