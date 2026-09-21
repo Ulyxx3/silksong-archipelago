@@ -3,84 +3,129 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>SilksongArchipelago</AssemblyName>
-    <RootNamespace>SilksongArchipelago</RootNamespace>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
+    <Version>0.4.6</Version>
+    <AssemblyVersion>0.4.6.0</AssemblyVersion>
+    <FileVersion>0.4.6.0</FileVersion>
+    <InformationalVersion>0.4.6</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+    <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
+    <SilksongGameDir Condition="'$(SilksongGameDir)' == '' and '$(SILKSONG_GAME_DIR)' != ''">$(SILKSONG_GAME_DIR)</SilksongGameDir>
+    <SilksongGameDir Condition="'$(SilksongGameDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong</SilksongGameDir>
+    <SilksongManagedDir>$(SilksongGameDir)\Hollow Knight Silksong_Data\Managed</SilksongManagedDir>
+    <BepInExCoreDir>$(SilksongGameDir)\BepInEx\core</BepInExCoreDir>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>0.1.0</Version>
-    <Authors>Ulyxx3</Authors>
-    <Description>
-      Archipelago Multiworld mod for Silksong using BepInEx and HarmonyX.
-    </Description>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
-  <!-- ═══════════════════════════════════════════════════════════════════ -->
-  <!-- NuGet dependencies                                                 -->
-  <!-- ═══════════════════════════════════════════════════════════════════ -->
   <ItemGroup>
-    <!-- Archipelago .NET client library -->
-    <PackageReference Include="Archipelago.MultiClient.Net" Version="6.*" />
-    <PackageReference Include="BepInEx.Core" Version="5.*" />
-    <PackageReference Include="HarmonyX" Version="2.*" />
+    <PackageReference Include="Archipelago.MultiClient.Net" Version="6.7.1" />
   </ItemGroup>
 
-  <!-- ═══════════════════════════════════════════════════════════════════ -->
-  <!-- Silksong & Unity references from local libs/ directory             -->
-  <!-- ═══════════════════════════════════════════════════════════════════ -->
   <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExCoreDir)\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\libs\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(SilksongManagedDir)\Assembly-CSharp.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\libs\UnityEngine.dll</HintPath>
+    <Reference Include="BepInEx">
+      <HintPath>$(BepInExCoreDir)\BepInEx.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\libs\UnityEngine.CoreModule.dll</HintPath>
+    <Reference Include="BepInEx.Harmony">
+      <HintPath>$(BepInExCoreDir)\BepInEx.Harmony.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\libs\UnityEngine.IMGUIModule.dll</HintPath>
+    <Reference Include="PlayMaker">
+      <HintPath>$(SilksongManagedDir)\PlayMaker.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>..\libs\UnityEngine.TextRenderingModule.dll</HintPath>
+    <Reference Include="TeamCherry.SharedUtils">
+      <HintPath>$(SilksongManagedDir)\TeamCherry.SharedUtils.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>..\libs\UnityEngine.InputLegacyModule.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>..\libs\UnityEngine.ImageConversionModule.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>..\libs\UnityEngine.UI.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\libs\UnityEngine.UIModule.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\libs\Unity.TextMeshPro.dll</HintPath>
+    <Reference Include="TeamCherry.NestedFadeGroup">
+      <HintPath>$(SilksongManagedDir)\TeamCherry.NestedFadeGroup.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="TeamCherry.Localization">
-      <HintPath>..\libs\TeamCherry.Localization.dll</HintPath>
+      <HintPath>$(SilksongManagedDir)\TeamCherry.Localization.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json.UnityConverters">
-      <HintPath>..\libs\Newtonsoft.Json.UnityConverters.dll</HintPath>
+    <Reference Include="UnityEngine">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.AudioModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.UIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(SilksongManagedDir)\Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.InputModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>$(SilksongManagedDir)\UnityEngine.Physics2DModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\ap_icon.png" />
+    <None Include="ArchipelagoIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\CheckIcons\*.png">
+      <Link>CheckIcons\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
-</Project>
+  <Target Name="ValidateSilksongInstall" BeforeTargets="ResolveReferences">
+    <Error Condition="'$(SilksongGameDir)' == ''"
+           Text="Set SilksongGameDir to the game installation directory, either with -p:SilksongGameDir=... or SILKSONG_GAME_DIR." />
+    <Error Condition="!Exists('$(SilksongManagedDir)\Assembly-CSharp.dll')"
+           Text="Silksong assemblies were not found under '$(SilksongGameDir)'. Set SilksongGameDir to the game installation directory." />
+    <Error Condition="!Exists('$(BepInExCoreDir)\BepInEx.dll')"
+           Text="BepInEx was not found under '$(SilksongGameDir)'. Install BepInEx or set SilksongGameDir correctly." />
+  </Target>
 
+</Project>

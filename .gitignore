@@ -9,6 +9,7 @@ cartography/data.json
 *.archipelago
 *.apsave
 *_spoiler.txt
+inspiration/
 
 # --- Proprietary Game Assemblies ---
 libs/*

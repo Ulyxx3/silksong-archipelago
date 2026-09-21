@@ -90,6 +90,7 @@ def generate_multiworld(players_dir: Path, seed_num: int | None = None) -> tuple
 
     # Core generation stages
     print("\nExecuting generation stages:")
+    mw.state = CollectionState(mw)
     print("  -> Initializing regions...")
     call_all(mw, "generate_early")
     call_all(mw, "create_regions")

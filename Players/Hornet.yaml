@@ -1,21 +1,27 @@
 description: Silksong player configuration for Hornet
 name: Hornet
-game: Silksong
+game: "Hollow Knight: Silksong"
 
-Silksong:
-  goal: true_ending
-  progression_abilities: true
-  progression_tools: true
-  progression_skills: true
-  progression_crests: true
-  bosses: true
-  wishes: true
-  fleas: true
-  upgrades: true
-  vendors: true
-  collectibles: true
-  benchsanity: false
-  fast_travel: false
-  mapsanity: false
-  loresanity: false
-  hunters_journal: false
+"Hollow Knight: Silksong":
+  goal: act_2
+  skill_randomization: anywhere
+  tool_randomization: anywhere
+  silk_skill_randomization: anywhere
+  crest_randomization: anywhere
+  flea_randomization: anywhere
+  crest_slot_randomization: anywhere
+  mask_shard_randomization: anywhere
+  spool_fragment_randomization: anywhere
+  silk_heart_randomization: anywhere
+  map_randomization: anywhere
+  pin_randomization: anywhere
+  relic_randomization: anywhere
+  crafting_kit_randomization: anywhere
+  simple_key_randomization: anywhere
+  memory_locket_randomization: anywhere
+  craftmetal_randomization: anywhere
+  mossberry_randomization: anywhere
+  tool_pouch_randomization: anywhere
+  boss_sanity: anywhere
+  quest_sanity: anywhere
+  death_link: false

@@ -1,15 +1,13 @@
 using System;
 using HarmonyLib;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-namespace SilksongArchipelago.Patches
+namespace SilksongRandomizer.Patches
 {
     /// <summary>
     /// Labels Save Slot 4 as "ARCHIPELAGO" in the save slot selection UI.
-    /// Slot 4 (user4.dat) is used as the dedicated Archipelago save file,
-    /// using the game's fully native save infrastructure.
     /// </summary>
     [HarmonyPatch]
     public static class Patch_DedicatedSaveSlot
@@ -49,7 +47,7 @@ namespace SilksongArchipelago.Patches
             }
             catch (Exception ex)
             {
-                SilksongArchipelagoPlugin.Log.LogError($"Failed to label Slot 4 as ARCHIPELAGO: {ex}");
+                RandomizerPlugin.Log?.LogWarning($"Failed to label Slot 4 as ARCHIPELAGO: {ex.Message}");
             }
         }
     }

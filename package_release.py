@@ -78,6 +78,17 @@ def package_bepinex_client() -> Path:
             else:
                 print(f"Warning: {dll_name} was not found and skipped.")
 
+        # Include icons and asset directories
+        bin_dir = CS_RELEASE_BIN if CS_RELEASE_BIN.exists() else CS_DIR / "bin" / "Debug" / "netstandard2.1"
+        icon_file = bin_dir / "ArchipelagoIcon.png"
+        if icon_file.exists():
+            zf.write(icon_file, "BepInEx/plugins/SilksongArchipelago/ArchipelagoIcon.png")
+
+        check_icons_dir = bin_dir / "CheckIcons"
+        if check_icons_dir.exists():
+            for icon in check_icons_dir.glob("*.png"):
+                zf.write(icon, f"BepInEx/plugins/SilksongArchipelago/CheckIcons/{icon.name}")
+
         # Include README/Setup instructions if present
         setup_doc = WORLD_DIR / "docs" / "setup_en.md"
         if setup_doc.exists():

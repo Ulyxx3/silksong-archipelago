@@ -1,0 +1,3697 @@
+using Archipelago.MultiClient.Net;
+using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Helpers;
+using Archipelago.MultiClient.Net.MessageLog.Messages;
+using Archipelago.MultiClient.Net.Models;
+using Archipelago.MultiClient.Net.Packets;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using static SilksongRandomizer.SaveState;
+
+namespace SilksongRandomizer
+{
+    public sealed class Archipelago
+    {
+        public const string GoalLocationName = "Goal";
+        public const string ActOneGoal = "act_1";
+        public const string ActTwoGoal = "act_2";
+        public const string ActThreeGoal = "act_3";
+        public const string CursedEndingGoal = "cursed_ending";
+        public const string FleaHuntGoal = "flea_hunt";
+        public const string SpellingBeeGoal = "spelling_bee";
+        public const int DefaultFleaHuntGoalCount = 20;
+        public const int MinimumFleaHuntGoalCount = 1;
+        public const int MaximumFleaHuntGoalCount = 30;
+        public const string RosaryMultiplierVanilla = "x1";
+        public const string RosaryMultiplierOneAndHalf = "x1_5";
+        public const string RosaryMultiplierDouble = "x2";
+        public const string RosaryMultiplierTriple = "x3";
+        public const string RosaryMultiplierQuintuple = "x5";
+        public const string RosaryMultiplierTenfold = "x10";
+        public const string BellwayAccessBellBeastRequired =
+            "bell_beast_required";
+        public const string BellwayAccessRandomizedStations =
+            "randomized_stations";
+        public const string TrailsEndRequirementShakraStock =
+            "shakra_stock";
+        public const string TrailsEndRequirementOwnedMaps =
+            "owned_maps";
+        public const string StartingLocationVanilla = "vanilla";
+        public const string StartingLocationBoneBottom = "bone_bottom";
+        public const string DeathLinkCocoonVanilla = "vanilla";
+        public const string DeathLinkCocoonless = "cocoonless";
+        public const string DeathLinkCocoonProtected = "cocoon";
+        public const string PriceModeVanilla = "vanilla";
+        public const string PriceModeFree = "free";
+        public const string PriceModeShuffle = "shuffle";
+        public const string PriceModeCheap = "cheap";
+        public const string PriceModeExpensive = "expensive";
+        public static Archipelago Instance { get; private set; }
+
+        public bool Connected => sessionReady && IsConnected();
+        public string RoomSeed { get; private set; } = string.Empty;
+        public string SlotName { get; private set; } = string.Empty;
+        public int Team { get; private set; } = -1;
+        public int Slot { get; private set; } = -1;
+        public string WorldVersion { get; private set; } = string.Empty;
+        public string Goal { get; private set; } = string.Empty;
+        public string SpellingBeePhrase { get; private set; } =
+            string.Empty;
+        public int FleaHuntGoalCount { get; private set; } =
+            DefaultFleaHuntGoalCount;
+        public string StartingLocation { get; private set; } =
+            StartingLocationVanilla;
+        public string StartingCrest { get; private set; } = string.Empty;
+        public bool SplitDashAndSprint { get; private set; }
+        public bool LedgegrabAbilityRando { get; private set; }
+        public bool SwimAbilityRando { get; private set; }
+        public bool ScuttlebraceLogic { get; private set; } = true;
+        public bool StartWithMaps { get; private set; }
+        public bool StartFullyMapped { get; private set; }
+        public bool AutomaticCompass { get; private set; }
+        public CheckMapMarkerMode CheckMapMarkers { get; private set; } =
+            CheckMapMarkerMode.Off;
+        public bool RandomizedBellMarkers { get; private set; }
+        public bool RandomizedMelodyMarkers { get; private set; }
+        public IReadOnlyDictionary<string, string>
+            RandomizedItemMarkerLocations { get; private set; } =
+                new ReadOnlyDictionary<string, string>(
+                    new Dictionary<string, string>(
+                        StringComparer.OrdinalIgnoreCase
+                    )
+                );
+        public int SilkAndSoulPoints { get; private set; } = 17;
+        public int VogAreaHintCount { get; private set; }
+        public IReadOnlyList<VogAreaHint> VogAreaHints { get; private set; } = Array.Empty<VogAreaHint>();
+        public string BellwayAccess { get; private set; } =
+            BellwayAccessBellBeastRequired;
+        public string TrailsEndRequirement { get; private set; } =
+            TrailsEndRequirementShakraStock;
+        public string EnemyRosaryMultiplier { get; private set; } =
+            RosaryMultiplierVanilla;
+        public string EnemyShardMultiplier { get; private set; } =
+            RosaryMultiplierVanilla;
+        public string NormalShopPrices { get; private set; } =
+            PriceModeVanilla;
+        public string BellwayPrices { get; private set; } =
+            PriceModeVanilla;
+        public string MapPrices { get; private set; } = PriceModeVanilla;
+        public string PinPrices { get; private set; } = PriceModeVanilla;
+        public string UpgradePrices { get; private set; } =
+            PriceModeVanilla;
+        public string DonationPrices { get; private set; } =
+            PriceModeVanilla;
+        public string VogHintPrices { get; private set; } =
+            PriceModeVanilla;
+        public IReadOnlyDictionary<string, int> PurchasePrices
+        {
+            get;
+            private set;
+        } = new ReadOnlyDictionary<string, int>(
+            new Dictionary<string, int>(StringComparer.Ordinal)
+        );
+        public bool FasterDialogue { get; private set; }
+        public bool AlphabetMode { get; private set; }
+        public IReadOnlyDictionary<string, ItemFlags>
+            CrestSlotItemFlags { get; private set; } =
+                new ReadOnlyDictionary<string, ItemFlags>(
+                    new Dictionary<string, ItemFlags>(
+                        StringComparer.OrdinalIgnoreCase
+                    )
+                );
+        public bool DeathLink { get; private set; }
+        public string DeathLinkCocoon { get; private set; } =
+            DeathLinkCocoonProtected;
+        public bool KnockbackLink { get; private set; }
+        public bool SilkLink { get; private set; }
+        public bool RosaryLink { get; private set; }
+        public bool ShellShardLink { get; private set; }
+        public bool IndividualRelicTurnIns { get; private set; }
+        public string MapLogicPayloadJson { get; private set; } =
+            string.Empty;
+        public RandomizationMode SkillRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode ToolRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode SilkSkillRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode CrestRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode EvaRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode SoulRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode OldHeartRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode TwistedBudRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode FleaRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode CrestSlotRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode MaskShardRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode SpoolFragmentRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode SilkHeartRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode BellwayRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode VentricaRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode MapRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode NeedleUpgradeRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode PaleOilRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode MelodyRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode PinRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode RelicRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode CraftingKitRandomization { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode MinorPickupRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode LoreTabletRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode SimpleKeyRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode MemoryLocketRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode CraftmetalRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode MossberryRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode PollipHeartRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode SilkeaterRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode MajorKeyRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode ToolPouchRandomization { get; private set; } = RandomizationMode.Vanilla;
+        public RandomizationMode BossSanity { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode BellShrineSanity { get; private set; } = RandomizationMode.Anywhere;
+        public RandomizationMode QuestSanity { get; private set; } = RandomizationMode.Anywhere;
+        public string LastError { get; private set; } = string.Empty;
+        public bool LastConnectionFailureRetryable { get; private set; } = true;
+
+        public event Action<string> OnItemReceived;
+        public event Action<string, ItemFlags> OnItemSent;
+        public event Action<string> ConnectionStatusChanged;
+
+        private readonly object stateLock = new object();
+        private readonly string configuredGameName;
+        private readonly HashSet<string> unlockedItems = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private readonly List<string> receivedItems = new List<string>();
+        private readonly HashSet<string> unlockedLocationNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private readonly HashSet<long> unlockedLocationIds = new HashSet<long>();
+        private readonly HashSet<string> pendingLocationNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private readonly HashSet<string> roomLocationNames =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Task<HintData>> pendingHints =
+            new Dictionary<string, Task<HintData>>(StringComparer.OrdinalIgnoreCase);
+        private readonly Queue<HintData[]> trackedHintUpdates =
+            new Queue<HintData[]>();
+        private sealed class HintScoutChannel
+        {
+            internal readonly SemaphoreSlim Gate =
+                new SemaphoreSlim(1, 1);
+            internal volatile bool Poisoned;
+        }
+
+        private HintScoutChannel hintScoutChannel =
+            new HintScoutChannel();
+        private const int HintScoutTimeoutMilliseconds = 10000;
+        private const int SlotDataTimeoutMilliseconds = 60000;
+        private const int MaximumLogicPayloadBytes = 8 * 1024 * 1024;
+        private const string LogicPayloadFormat = "gzip_base64_v1";
+        private const int DisconnectWaitMilliseconds = 3000;
+
+        private readonly object connectionLock = new object();
+        private readonly SemaphoreSlim connectionAttemptGate =
+            new SemaphoreSlim(1, 1);
+        private ArchipelagoSession session;
+        private ReceivedItemsHelper.ItemReceivedHandler
+            itemReceivedHandler;
+        private MessageLogHelper.MessageReceivedHandler
+            messageReceivedHandler;
+        private LocationCheckHelper.CheckedLocationsUpdatedHandler
+            checkedLocationsUpdatedHandler;
+        private ArchipelagoSocketHelperDelagates.SocketClosedHandler
+            socketClosedHandler;
+        private ArchipelagoSocketHelperDelagates.ErrorReceivedHandler
+            socketErrorHandler;
+        private Task pendingDisconnectTask;
+        private int lastQueuedItemIndex;
+        private SaveState queuedForSaveState;
+        private bool goalStatusPending;
+        private volatile bool sessionReady;
+        private int receivedItemsRefreshRequested;
+        private int checkedLocationsRefreshRequested;
+
+        public Archipelago(string gameName = "Hollow Knight: Silksong")
+        {
+            configuredGameName = string.IsNullOrWhiteSpace(gameName) ? "Hollow Knight: Silksong" : gameName;
+            Instance = this;
+        }
+
+        public bool Connect(
+            string ip,
+            int port,
+            string slot,
+            string pass,
+            bool preserveState = false
+        )
+        {
+            if (string.IsNullOrWhiteSpace(ip) || string.IsNullOrWhiteSpace(slot))
+            {
+                LastError = "Host and slot are required.";
+                LastConnectionFailureRetryable = false;
+                return false;
+            }
+
+            connectionAttemptGate.Wait();
+            try
+            {
+                return ConnectSingleAttempt(
+                    ip,
+                    port,
+                    slot,
+                    pass,
+                    preserveState
+                );
+            }
+            finally
+            {
+                connectionAttemptGate.Release();
+            }
+        }
+
+        private bool ConnectSingleAttempt(
+            string ip,
+            int port,
+            string slot,
+            string pass,
+            bool preserveState
+        )
+        {
+            Disconnect();
+            WaitForPendingDisconnect();
+            if (preserveState)
+            {
+                ResetConnectionTransientState();
+            }
+            else
+            {
+                ClearState();
+            }
+            LastError = string.Empty;
+            LastConnectionFailureRetryable = true;
+
+            try
+            {
+                ArchipelagoSession connectedSession =
+                    ArchipelagoSessionFactory.CreateSession(ip, port);
+                ReceivedItemsHelper.ItemReceivedHandler
+                    connectedItemReceivedHandler = helper =>
+                        HandleItemReceived(connectedSession, helper);
+                MessageLogHelper.MessageReceivedHandler
+                    connectedMessageReceivedHandler = message =>
+                        HandleMessageReceived(connectedSession, message);
+                LocationCheckHelper.CheckedLocationsUpdatedHandler
+                    connectedCheckedLocationsUpdatedHandler = locations =>
+                        OnCheckedLocationsUpdated(
+                            connectedSession,
+                            locations
+                        );
+                ArchipelagoSocketHelperDelagates.SocketClosedHandler
+                    closedHandler = reason =>
+                        OnSocketClosed(connectedSession, reason);
+                ArchipelagoSocketHelperDelagates.ErrorReceivedHandler
+                    errorHandler = (exception, message) =>
+                        OnSocketError(connectedSession, exception, message);
+                lock (connectionLock)
+                {
+                    session = connectedSession;
+                    itemReceivedHandler = connectedItemReceivedHandler;
+                    messageReceivedHandler = connectedMessageReceivedHandler;
+                    checkedLocationsUpdatedHandler =
+                        connectedCheckedLocationsUpdatedHandler;
+                    socketClosedHandler = closedHandler;
+                    socketErrorHandler = errorHandler;
+                }
+
+                connectedSession.Items.ItemReceived +=
+                    connectedItemReceivedHandler;
+                connectedSession.MessageLog.OnMessageReceived +=
+                    connectedMessageReceivedHandler;
+                connectedSession.Locations.CheckedLocationsUpdated +=
+                    connectedCheckedLocationsUpdatedHandler;
+                connectedSession.Socket.SocketClosed += closedHandler;
+                connectedSession.Socket.ErrorReceived += errorHandler;
+
+                LoginResult result = connectedSession.TryConnectAndLogin(
+                    configuredGameName,
+                    slot,
+                    ItemsHandlingFlags.AllItems,
+                    new Version(0, 6, 0),
+                    new[] { "AP" },
+                    null,
+                    pass,
+                    false
+                );
+
+                if (result == null || !result.Successful)
+                {
+                    LoginFailure failure = result as LoginFailure;
+                    LastError = failure != null && failure.Errors != null && failure.Errors.Length > 0
+                        ? string.Join("; ", failure.Errors)
+                        : "The Archipelago server rejected the login.";
+                    LastConnectionFailureRetryable =
+                        !IsDeterministicLoginFailure(
+                            failure,
+                            preserveState
+                        );
+                    Disconnect();
+                    return false;
+                }
+
+                LoginSuccessful successful = result as LoginSuccessful;
+                successful = GetSlotDataAfterLogin(
+                    connectedSession,
+                    successful
+                );
+                RoomSeed = connectedSession.RoomState == null
+                    ? string.Empty
+                    : connectedSession.RoomState.Seed ?? string.Empty;
+                SlotName = connectedSession.Players.ActivePlayer == null ||
+                           string.IsNullOrWhiteSpace(
+                               connectedSession.Players.ActivePlayer.Name
+                           )
+                    ? slot
+                    : connectedSession.Players.ActivePlayer.Name;
+                Team = successful == null
+                    ? connectedSession.ConnectionInfo.Team
+                    : successful.Team;
+                Slot = successful == null
+                    ? connectedSession.ConnectionInfo.Slot
+                    : successful.Slot;
+                WorldVersion = GetWorldVersion(successful);
+
+                if (!IsSupportedWorldVersion(WorldVersion))
+                {
+                    string incompatible = "APWorld version '" +
+                        (string.IsNullOrWhiteSpace(WorldVersion) ? "missing" : WorldVersion) +
+                        "' is incompatible with plugin " + RandomizerPlugin.PluginVersion + ".";
+                    Disconnect();
+                    LastError = incompatible;
+                    LastConnectionFailureRetryable = false;
+                    ReportStatus(incompatible);
+                    return false;
+                }
+
+                string goal = GetGoal(successful);
+                if (!IsSupportedGoal(goal))
+                {
+                    string incompatible = "APWorld goal '" +
+                        (string.IsNullOrWhiteSpace(goal) ? "missing" : goal) +
+                        "' is invalid. Expected '" + ActOneGoal +
+                        "', '" + ActTwoGoal + "', '" + ActThreeGoal +
+                        "', '" + CursedEndingGoal + "' or '" +
+                        FleaHuntGoal + "' or '" +
+                        SpellingBeeGoal + "'.";
+                    Disconnect();
+                    LastError = incompatible;
+                    LastConnectionFailureRetryable = false;
+                    ReportStatus(incompatible);
+                    return false;
+                }
+
+                string startingCrest = GetStartingCrest(successful);
+                if (!CrestNames.IsSupportedStartingCrestKey(startingCrest))
+                {
+                    string incompatible = "APWorld starting crest '" +
+                        (string.IsNullOrWhiteSpace(startingCrest) ? "missing" : startingCrest) +
+                        "' is invalid; expected one of: " +
+                        string.Join(", ", CrestNames.SupportedStartingCrestKeys) + ".";
+                    Disconnect();
+                    LastError = incompatible;
+                    LastConnectionFailureRetryable = false;
+                    ReportStatus(incompatible);
+                    return false;
+                }
+
+                string startingLocation = GetStartingLocation(successful);
+                if (!IsSupportedStartingLocation(startingLocation))
+                {
+                    string incompatible = "APWorld starting location '" +
+                        (string.IsNullOrWhiteSpace(startingLocation)
+                            ? "missing"
+                            : startingLocation) +
+                        "' is invalid; expected '" +
+                        StartingLocationVanilla + "' or '" +
+                        StartingLocationBoneBottom + "'.";
+                    Disconnect();
+                    LastError = incompatible;
+                    LastConnectionFailureRetryable = false;
+                    ReportStatus(incompatible);
+                    return false;
+                }
+
+                Goal = goal;
+                SpellingBeePhrase =
+                    GetSpellingBeePhrase(successful, goal);
+                if (string.Equals(
+                        goal,
+                        SpellingBeeGoal,
+                        StringComparison.Ordinal
+                    ) &&
+                    !SilksongRandomizer.AlphabetMode.SpellingBeeGoal
+                        .IsValidPhrase(
+                        SpellingBeePhrase
+                    ))
+                {
+                    string incompatible =
+                        "APWorld spelling_bee_phrase is invalid.";
+                    Disconnect();
+                    LastError = incompatible;
+                    LastConnectionFailureRetryable = false;
+                    ReportStatus(incompatible);
+                    return false;
+                }
+                FleaHuntGoalCount = GetIntegerSlotData(
+                    successful,
+                    "flea_hunt_count",
+                    MinimumFleaHuntGoalCount,
+                    MaximumFleaHuntGoalCount
+                );
+                StartingLocation = startingLocation;
+                StartingCrest = startingCrest;
+                SplitDashAndSprint = GetBooleanSlotData(
+                    successful,
+                    "split_dash_and_sprint"
+                );
+                LedgegrabAbilityRando = GetBooleanSlotData(
+                    successful,
+                    "ledgegrab_ability_rando"
+                );
+                SwimAbilityRando = GetBooleanSlotData(
+                    successful,
+                    "swim_ability_rando"
+                );
+                ScuttlebraceLogic = GetBooleanSlotData(
+                    successful,
+                    "scuttlebrace_logic"
+                );
+                StartWithMaps = GetBooleanSlotData(
+                    successful,
+                    "start_with_maps"
+                );
+                StartFullyMapped = GetBooleanSlotData(
+                    successful,
+                    "start_fully_mapped"
+                );
+                AutomaticCompass = GetBooleanSlotData(
+                    successful,
+                    "automatic_compass"
+                );
+                CheckMapMarkers =
+                    GetCheckMapMarkerMode(successful);
+                RandomizedBellMarkers = GetBooleanSlotData(
+                    successful,
+                    "randomized_bell_markers"
+                );
+                RandomizedMelodyMarkers = GetBooleanSlotData(
+                    successful,
+                    "randomized_melody_markers"
+                );
+                RandomizedItemMarkerLocations =
+                    GetRandomizedItemMarkerLocations(successful);
+                JObject vogPlan = GetRequiredObjectSlotData(successful, "vog_hints");
+                VogAreaHints = GetVogAreaHints(vogPlan);
+                VogAreaHintCount = GetVogHintPlanInteger(successful, "area_count", 0, 30);
+                if (VogAreaHintCount > VogAreaHints.Count)
+                {
+                    throw new FormatException("Vog area count exceeds the available areas.");
+                }
+                SilkAndSoulPoints = goal == "act_3"
+                    ? Math.Min(25, GetIntegerSlotData(successful, "silk_and_soul_points", 0, int.MaxValue))
+                    : 17;
+                BellwayAccess = GetBellwayAccess(successful);
+                TrailsEndRequirement =
+                    GetTrailsEndRequirement(successful);
+                EnemyRosaryMultiplier =
+                    GetEnemyRosaryMultiplier(successful);
+                EnemyShardMultiplier =
+                    GetEnemyShardMultiplier(successful);
+                NormalShopPrices = GetPurchasePriceMode(
+                    successful,
+                    "normal_shop_prices"
+                );
+                BellwayPrices = GetPurchasePriceMode(
+                    successful,
+                    "bellway_prices"
+                );
+                MapPrices = GetPurchasePriceMode(
+                    successful,
+                    "map_prices"
+                );
+                PinPrices = GetPurchasePriceMode(
+                    successful,
+                    "pin_prices"
+                );
+                UpgradePrices = GetPurchasePriceMode(
+                    successful,
+                    "upgrade_prices"
+                );
+                DonationPrices = GetPurchasePriceMode(
+                    successful,
+                    "donation_prices"
+                );
+                VogHintPrices = GetPurchasePriceMode(
+                    successful,
+                    "vog_hint_prices"
+                );
+                PurchasePrices = GetPurchasePrices(successful);
+                FasterDialogue = GetBooleanSlotData(
+                    successful,
+                    "faster_dialogue"
+                );
+                AlphabetMode = GetBooleanSlotData(
+                    successful,
+                    "alphabet_mode"
+                );
+                CrestSlotItemFlags =
+                    GetCrestSlotItemFlags(successful);
+                DeathLink = GetBooleanSlotData(
+                    successful,
+                    "death_link"
+                );
+                DeathLinkCocoon = GetDeathLinkCocoonMode(successful);
+                KnockbackLink = successful.SlotData.ContainsKey("knockback_link") &&
+                    GetBooleanSlotData(successful, "knockback_link");
+                SilkLink = GetBooleanSlotData(
+                    successful,
+                    "silk_link"
+                );
+                RosaryLink = GetBooleanSlotData(
+                    successful,
+                    "rosary_link"
+                );
+                ShellShardLink = GetBooleanSlotData(
+                    successful,
+                    "shell_shard_link"
+                );
+                IndividualRelicTurnIns = GetBooleanSlotData(
+                    successful,
+                    "individual_relic_turn_ins"
+                );
+                SkillRandomization = GetRandomizationModeSlotData(
+                    successful, "skill_randomization");
+                ToolRandomization = GetRandomizationModeSlotData(
+                    successful, "tool_randomization");
+                SilkSkillRandomization = GetRandomizationModeSlotData(
+                    successful, "silk_skill_randomization");
+                CrestRandomization = GetRandomizationModeSlotData(
+                    successful, "crest_randomization");
+                EvaRandomization = GetRandomizationModeSlotData(
+                    successful, "eva_randomization");
+                SoulRandomization = GetRandomizationModeSlotData(successful, "soul_randomization");
+                OldHeartRandomization = GetRandomizationModeSlotData(successful, "old_heart_randomization");
+                TwistedBudRandomization = GetRandomizationModeSlotData(successful, "twisted_bud_randomization");
+                FleaRandomization = GetRandomizationModeSlotData(
+                    successful, "flea_randomization");
+                CrestSlotRandomization = GetRandomizationModeSlotData(
+                    successful, "crest_slot_randomization");
+                MaskShardRandomization = GetRandomizationModeSlotData(
+                    successful, "mask_shard_randomization");
+                SpoolFragmentRandomization = GetRandomizationModeSlotData(
+                    successful, "spool_fragment_randomization");
+                SilkHeartRandomization = GetRandomizationModeSlotData(
+                    successful, "silk_heart_randomization");
+                BellwayRandomization = GetRandomizationModeSlotData(
+                    successful, "bellway_randomization");
+                VentricaRandomization = GetRandomizationModeSlotData(
+                    successful, "ventrica_randomization");
+                MapRandomization = GetRandomizationModeSlotData(
+                    successful, "map_randomization");
+                NeedleUpgradeRandomization = GetRandomizationModeSlotData(
+                    successful, "needle_upgrade_randomization");
+                PaleOilRandomization = GetRandomizationModeSlotData(
+                    successful, "pale_oil_randomization");
+                MelodyRandomization = GetRandomizationModeSlotData(
+                    successful, "melody_randomization");
+                PinRandomization = GetRandomizationModeSlotData(
+                    successful, "pin_randomization");
+                RelicRandomization = GetRandomizationModeSlotData(
+                    successful, "relic_randomization");
+                CraftingKitRandomization = GetRandomizationModeSlotData(
+                    successful, "crafting_kit_randomization");
+                MinorPickupRandomization = GetRandomizationModeSlotData(
+                    successful, "minor_pickup_randomization");
+                LoreTabletRandomization = GetRandomizationModeSlotData(
+                    successful, "lore_tablet_randomization");
+                SimpleKeyRandomization = GetRandomizationModeSlotData(
+                    successful, "simple_key_randomization");
+                MemoryLocketRandomization = GetRandomizationModeSlotData(
+                    successful, "memory_locket_randomization");
+                CraftmetalRandomization = GetRandomizationModeSlotData(
+                    successful, "craftmetal_randomization");
+                MossberryRandomization = GetRandomizationModeSlotData(
+                    successful, "mossberry_randomization");
+                PollipHeartRandomization = GetRandomizationModeSlotData(
+                    successful, "pollip_heart_randomization");
+                SilkeaterRandomization = GetRandomizationModeSlotData(
+                    successful, "silkeater_randomization");
+                MajorKeyRandomization = GetRandomizationModeSlotData(
+                    successful, "major_key_randomization");
+                ToolPouchRandomization = GetRandomizationModeSlotData(
+                    successful, "tool_pouch_randomization");
+                BossSanity = GetRandomizationModeSlotData(
+                    successful, "boss_sanity");
+                BellShrineSanity = GetRandomizationModeSlotData(
+                    successful, "bell_shrine_sanity");
+                QuestSanity = GetRandomizationModeSlotData(
+                    successful,
+                    "quest_sanity"
+                );
+                MapLogicPayloadJson =
+                    GetMapLogicPayloadJson(successful);
+                if (SaveState.Instance != null && SaveState.Instance.IsRoomBound &&
+                    !SaveState.Instance.MatchesRoom(this))
+                {
+                    string mismatch = SaveState.Instance.GetRoomMismatchMessage(this);
+                    Disconnect();
+                    LastError = mismatch;
+                    LastConnectionFailureRetryable = false;
+                    ReportStatus(mismatch);
+                    return false;
+                }
+
+                CaptureRoomLocations(connectedSession);
+                RequestReceivedItemsRefresh();
+                RefreshCheckedLocations(connectedSession);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LastError = ex.Message;
+                Disconnect();
+                ReportStatus("Connection failed: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool IsItemUnlocked(string itemName)
+        {
+            if (string.IsNullOrWhiteSpace(itemName))
+            {
+                return false;
+            }
+
+            string canonicalItemName =
+                ItemSet.GetCanonicalItemName(itemName);
+            lock (stateLock)
+            {
+                return unlockedItems.Contains(canonicalItemName);
+            }
+        }
+
+        public void UnlockItem(string itemName)
+        {
+            AddReceivedItem(itemName, true);
+        }
+
+        public IReadOnlyList<string> GetAllReceivedItems()
+        {
+            lock (stateLock)
+            {
+                return receivedItems.ToArray();
+            }
+        }
+
+        public IReadOnlyList<string> GetRecentReceivedItemNames(int maximum)
+        {
+            if (maximum <= 0)
+            {
+                return Array.Empty<string>();
+            }
+            List<string> history = SaveState.Instance?.receivedItemHistory;
+            if (history != null && history.Count > 0)
+            {
+                return history.Take(Math.Max(0, SaveState.Instance.receivedItemIndex)).Reverse().Where(name =>
+                    !string.IsNullOrWhiteSpace(name)).Take(maximum).ToArray();
+            }
+            lock (stateLock)
+            {
+                return receivedItems.AsEnumerable().Reverse().Take(maximum).ToArray();
+            }
+        }
+
+        public IReadOnlyDictionary<string, int> GetReceivedItemCounts()
+        {
+            Dictionary<string, int> counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            SaveState state = SaveState.Instance;
+            if (state == null)
+            {
+                return counts;
+            }
+            foreach (string entry in (state.receivedItemHistory ?? new List<string>())
+                .Take(Math.Max(0, state.receivedItemIndex)))
+            {
+                string name = ItemSet.GetCanonicalItemName(entry);
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    counts.TryGetValue(name, out int previous);
+                    counts[name] = previous + 1;
+                }
+            }
+            return counts;
+        }
+
+        public bool ValidateLoadedSave(SaveState saveState, out string error)
+        {
+            error = string.Empty;
+
+            if (saveState == null || !IsConnected())
+            {
+                return true;
+            }
+
+            if (saveState.IsRoomBound && !saveState.MatchesRoom(this))
+            {
+                error = saveState.GetRoomMismatchMessage(this);
+                return false;
+            }
+
+            List<ReceivedItemReceipt> serverItems = ReceivedItemReceipt.FromServer(
+                session.Items.AllItemsReceived.ToArray(), GetItemName);
+            if (saveState.TrySynchronizeReceivedReceipts(serverItems))
+            {
+                RandomizerPlugin.Instance?.ClearPendingReceivedItems();
+                ResetReceivedItemQueueCursor();
+                return true;
+            }
+
+            error =
+                "This randomizer game save does not match the AP " +
+                "server's received-item history. Load the server's " +
+                "matching .apsave, or load the matching randomizer " +
+                "game save.";
+            return false;
+        }
+
+        public void SynchronizeSaveState()
+        {
+            SaveState saveState = SaveState.Instance;
+            if (saveState == null || !Connected)
+            {
+                return;
+            }
+
+            if (saveState.IsRoomBound && !saveState.MatchesRoom(this))
+            {
+                LastError = saveState.GetRoomMismatchMessage(this);
+                ReportStatus(LastError);
+                return;
+            }
+
+            if (!saveState.IsRoomBound)
+            {
+                saveState.BindToRoom(this);
+            }
+            else if (!saveState.vogHintSettingsBound)
+            {
+                saveState.BindVogHintSettings(this);
+            }
+
+            foreach (HintData hint in GetOfficialHintsForCurrentSlot())
+            {
+                saveState.CacheHint(hint);
+            }
+
+            saveState.SetRoomLocationNames(GetRoomLocationNames());
+            saveState.mapLogicPayloadJson =
+                MapLogicPayloadJson ?? string.Empty;
+            saveState.PrimeMapLogicPayloadCompression();
+            MapLogicEvaluator.PreparePayload(saveState);
+            saveState.TryCompleteFleaHuntGoal();
+
+            string[] serverChecks;
+            lock (stateLock)
+            {
+                serverChecks = unlockedLocationNames.ToArray();
+            }
+
+            foreach (string locationName in serverChecks)
+            {
+                saveState.checkedLocations.Add(locationName);
+            }
+
+            lock (stateLock)
+            {
+                foreach (string locationName in saveState.checkedLocations)
+                {
+                    if (!string.Equals(
+                            locationName,
+                            GoalLocationName,
+                            StringComparison.OrdinalIgnoreCase))
+                    {
+                        pendingLocationNames.Add(locationName);
+                    }
+                }
+            }
+
+            RequestReceivedItemsRefresh();
+            ProcessReceivedItems();
+
+            if (saveState.goalCompleted)
+            {
+                goalStatusPending = true;
+            }
+        }
+
+        public void Resynchronize()
+        {
+            SynchronizeSaveState();
+            FlushPendingLocations();
+        }
+
+        public bool CompleteConnectionSync()
+        {
+            if (!IsConnected())
+            {
+                LastError = "The Archipelago socket closed during login.";
+                LastConnectionFailureRetryable = true;
+                return false;
+            }
+
+            ArchipelagoSession connectedSession = session;
+            SaveState saveState = SaveState.Instance;
+            if (saveState != null &&
+                !ValidateLoadedSave(saveState, out string mismatch))
+            {
+                Disconnect();
+                LastError = mismatch;
+                LastConnectionFailureRetryable = false;
+                ReportStatus(mismatch);
+                return false;
+            }
+
+            lock (connectionLock)
+            {
+                if (!ReferenceEquals(session, connectedSession) ||
+                    connectedSession.Socket == null ||
+                    !connectedSession.Socket.Connected)
+                {
+                    LastError =
+                        "The Archipelago socket closed during login.";
+                    LastConnectionFailureRetryable = true;
+                    return false;
+                }
+                sessionReady = true;
+            }
+            try
+            {
+                TrackOfficialHints();
+                connectedSession.SetClientState(
+                    ArchipelagoClientState.ClientPlaying
+                );
+                Resynchronize();
+                if (!DeathLinkManager.Configure(
+                        connectedSession,
+                        SlotName,
+                        DeathLink,
+                        DeathLinkCocoon
+                    ))
+                {
+                    throw new InvalidOperationException(
+                        "DeathLink could not be initialized."
+                    );
+                }
+                KnockbackLinkManager.Configure(connectedSession, SlotName, KnockbackLink);
+                if (!SilkLinkManager.Configure(
+                        connectedSession,
+                        SilkLink
+                    ))
+                {
+                    throw new InvalidOperationException(
+                        "Silk Link could not be initialized."
+                    );
+                }
+                if (!CurrencyLinkManager.Configure(
+                        connectedSession,
+                        RosaryLink,
+                        ShellShardLink
+                    ))
+                {
+                    throw new InvalidOperationException(
+                        "Rosary/Shell Shard links could not be initialized."
+                    );
+                }
+                if (!IsCurrentReadySession(connectedSession))
+                {
+                    throw new IOException(
+                        "The Archipelago socket closed during synchronization."
+                    );
+                }
+                ReportStatus("Connected to " + SlotName + " on seed " + RoomSeed + ".");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                string failure = "Connection synchronization failed: " + ex.Message;
+                bool retryable = !Connected;
+                Disconnect();
+                LastError = failure;
+                LastConnectionFailureRetryable = retryable;
+                ReportStatus(failure);
+                return false;
+            }
+        }
+
+        public bool ProcessCheckedLocations()
+        {
+            if (Volatile.Read(ref checkedLocationsRefreshRequested) == 0)
+            {
+                return false;
+            }
+
+            SaveState saveState = SaveState.Instance;
+            if (saveState == null || !Connected ||
+                (saveState.IsRoomBound && !saveState.MatchesRoom(this)))
+            {
+                return false;
+            }
+
+            if (Interlocked.Exchange(
+                    ref checkedLocationsRefreshRequested,
+                    0
+                ) == 0)
+            {
+                return false;
+            }
+
+            string[] serverChecks;
+            lock (stateLock)
+            {
+                serverChecks = unlockedLocationNames.ToArray();
+            }
+
+            bool changed = false;
+            foreach (string locationName in serverChecks)
+            {
+                string canonicalName =
+                    LocationSet.GetCanonicalLocationName(locationName);
+                if (!string.IsNullOrWhiteSpace(canonicalName))
+                {
+                    changed |= saveState.checkedLocations.Add(canonicalName);
+                }
+            }
+
+            return changed;
+        }
+
+        public void ProcessReceivedItems()
+        {
+            if (Interlocked.Exchange(
+                    ref receivedItemsRefreshRequested,
+                    0
+                ) == 0)
+            {
+                return;
+            }
+
+            ArchipelagoSession sourceSession;
+            lock (connectionLock)
+            {
+                sourceSession = sessionReady ? session : null;
+            }
+            if (sourceSession == null)
+            {
+                return;
+            }
+
+            try
+            {
+                ItemInfo[] allItems =
+                    sourceSession.Items.AllItemsReceived.ToArray();
+                if (!IsCurrentReadySession(sourceSession))
+                {
+                    return;
+                }
+
+                foreach (ItemInfo item in allItems)
+                {
+                    MarkItemUnlocked(item, false);
+                }
+                QueueUnprocessedReceivedItems(sourceSession, allItems);
+            }
+            catch (Exception ex)
+            {
+                if (IsCurrentReadySession(sourceSession))
+                {
+                    Interlocked.Exchange(
+                        ref receivedItemsRefreshRequested,
+                        1
+                    );
+                }
+                RandomizerPlugin.Log?.LogError(
+                    "[RANDOMIZER] Received-item reconciliation failed: " + ex
+                );
+            }
+        }
+
+        public void ResetReceivedItemQueueCursor()
+        {
+            lock (stateLock)
+            {
+                queuedForSaveState = null;
+                lastQueuedItemIndex = 0;
+            }
+            RequestReceivedItemsRefresh();
+        }
+
+        public void UnlockLocation(string locationName)
+        {
+            if (string.IsNullOrWhiteSpace(locationName))
+            {
+                return;
+            }
+
+            if (string.Equals(
+                    locationName,
+                    GoalLocationName,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                goalStatusPending = true;
+                SendGoalStatus();
+                return;
+            }
+
+            lock (stateLock)
+            {
+                if (unlockedLocationNames.Contains(locationName))
+                {
+                    return;
+                }
+            }
+
+            if (!Connected)
+            {
+                lock (stateLock)
+                {
+                    pendingLocationNames.Add(locationName);
+                }
+
+                return;
+            }
+
+            long locationId = GetLocationId(locationName);
+            if (locationId < 0)
+            {
+                return;
+            }
+
+            try
+            {
+                session.Locations.CompleteLocationChecks(locationId);
+                MarkLocationUnlocked(locationName, locationId);
+            }
+            catch (Exception ex)
+            {
+                lock (stateLock)
+                {
+                    pendingLocationNames.Add(locationName);
+                }
+
+                LastError = "Could not send location '" + locationName + "': " + ex.Message;
+            }
+        }
+
+        public bool IsLocationUnlocked(string locationName)
+        {
+            if (string.IsNullOrWhiteSpace(locationName))
+            {
+                return false;
+            }
+
+            if (string.Equals(
+                    locationName,
+                    GoalLocationName,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return SaveState.Instance != null &&
+                       SaveState.Instance.goalCompleted;
+            }
+
+            lock (stateLock)
+            {
+                if (unlockedLocationNames.Contains(locationName))
+                {
+                    return true;
+                }
+            }
+
+            if (!Connected)
+            {
+                return false;
+            }
+
+            long locationId = GetLocationId(locationName);
+            if (locationId < 0)
+            {
+                return false;
+            }
+
+            bool checkedOnServer = session.Locations.AllLocationsChecked.Contains(locationId);
+            if (checkedOnServer)
+            {
+                MarkLocationUnlocked(locationName, locationId);
+            }
+
+            return checkedOnServer;
+        }
+
+        public bool IsLocationInRoom(string locationName)
+        {
+            if (string.IsNullOrWhiteSpace(locationName))
+            {
+                return false;
+            }
+
+            string canonicalName =
+                LocationSet.GetCanonicalLocationName(locationName);
+            lock (stateLock)
+            {
+                return roomLocationNames.Contains(canonicalName);
+            }
+        }
+
+        public IReadOnlyList<string> GetRoomLocationNames()
+        {
+            lock (stateLock)
+            {
+                return roomLocationNames.ToArray();
+            }
+        }
+
+        public void Disconnect()
+        {
+            ArchipelagoSession oldSession;
+            bool wasSessionReady;
+            ReceivedItemsHelper.ItemReceivedHandler
+                oldItemReceivedHandler;
+            MessageLogHelper.MessageReceivedHandler
+                oldMessageReceivedHandler;
+            LocationCheckHelper.CheckedLocationsUpdatedHandler
+                oldCheckedLocationsUpdatedHandler;
+            ArchipelagoSocketHelperDelagates.SocketClosedHandler
+                oldClosedHandler;
+            ArchipelagoSocketHelperDelagates.ErrorReceivedHandler
+                oldErrorHandler;
+            lock (connectionLock)
+            {
+                wasSessionReady = sessionReady;
+                sessionReady = false;
+                oldSession = session;
+                session = null;
+                oldItemReceivedHandler = itemReceivedHandler;
+                itemReceivedHandler = null;
+                oldMessageReceivedHandler = messageReceivedHandler;
+                messageReceivedHandler = null;
+                oldCheckedLocationsUpdatedHandler =
+                    checkedLocationsUpdatedHandler;
+                checkedLocationsUpdatedHandler = null;
+                oldClosedHandler = socketClosedHandler;
+                socketClosedHandler = null;
+                oldErrorHandler = socketErrorHandler;
+                socketErrorHandler = null;
+            }
+            Interlocked.Exchange(ref receivedItemsRefreshRequested, 0);
+            Interlocked.Exchange(ref checkedLocationsRefreshRequested, 0);
+
+            DeathLinkManager.Reset();
+            SilkLinkManager.Reset();
+            KnockbackLinkManager.Reset();
+            CurrencyLinkManager.Reset();
+            Patches.VogHintManager.Reset();
+
+            if (wasSessionReady)
+            {
+                RandomizerPlugin.Instance?.RequestDisconnectSave();
+            }
+
+            if (oldSession == null)
+            {
+                return;
+            }
+
+            try
+            {
+                if (oldItemReceivedHandler != null)
+                {
+                    oldSession.Items.ItemReceived -= oldItemReceivedHandler;
+                }
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                if (oldMessageReceivedHandler != null)
+                {
+                    oldSession.MessageLog.OnMessageReceived -=
+                        oldMessageReceivedHandler;
+                }
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                if (oldCheckedLocationsUpdatedHandler != null)
+                {
+                    oldSession.Locations.CheckedLocationsUpdated -=
+                        oldCheckedLocationsUpdatedHandler;
+                }
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                if (oldClosedHandler != null)
+                {
+                    oldSession.Socket.SocketClosed -= oldClosedHandler;
+                }
+                if (oldErrorHandler != null)
+                {
+                    oldSession.Socket.ErrorReceived -= oldErrorHandler;
+                }
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                if (oldSession.Socket != null && oldSession.Socket.Connected)
+                {
+                    Task disconnectTask = oldSession.Socket.DisconnectAsync();
+                    TrackPendingDisconnect(disconnectTask);
+                }
+            }
+            catch (Exception ex)
+            {
+                RandomizerPlugin.Log?.LogWarning(
+                    "[RANDOMIZER] Archipelago disconnect failed: " +
+                    ex.GetBaseException().Message
+                );
+            }
+        }
+
+        private void TrackPendingDisconnect(Task disconnectTask)
+        {
+            if (disconnectTask == null)
+            {
+                return;
+            }
+
+            lock (connectionLock)
+            {
+                if (pendingDisconnectTask == null ||
+                    pendingDisconnectTask.IsCompleted)
+                {
+                    pendingDisconnectTask = disconnectTask;
+                }
+                else
+                {
+                    pendingDisconnectTask = Task.WhenAll(
+                        pendingDisconnectTask,
+                        disconnectTask
+                    );
+                }
+            }
+
+            _ = ObserveDisconnectAsync(disconnectTask);
+        }
+
+        private void WaitForPendingDisconnect()
+        {
+            Task disconnectTask;
+            lock (connectionLock)
+            {
+                disconnectTask = pendingDisconnectTask;
+            }
+
+            if (disconnectTask == null)
+            {
+                return;
+            }
+
+            try
+            {
+                if (!disconnectTask.Wait(DisconnectWaitMilliseconds))
+                {
+                    RandomizerPlugin.Log?.LogWarning(
+                        "[RANDOMIZER] Previous Archipelago connection is " +
+                        "still closing. Reconnect will continue."
+                    );
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                RandomizerPlugin.Log?.LogWarning(
+                    "[RANDOMIZER] Previous Archipelago connection did not " +
+                    "close cleanly: " + ex.GetBaseException().Message
+                );
+            }
+
+            lock (connectionLock)
+            {
+                if (ReferenceEquals(pendingDisconnectTask, disconnectTask))
+                {
+                    pendingDisconnectTask = null;
+                }
+            }
+        }
+
+        private static async Task ObserveDisconnectAsync(Task disconnectTask)
+        {
+            try
+            {
+                await disconnectTask.ConfigureAwait(false);
+            }
+            catch
+            {
+            }
+        }
+
+        private void RequestCheckedLocationsRefresh()
+        {
+            Interlocked.Exchange(ref checkedLocationsRefreshRequested, 1);
+        }
+
+        private void RequestReceivedItemsRefresh()
+        {
+            Interlocked.Exchange(ref receivedItemsRefreshRequested, 1);
+        }
+
+        private void HandleItemReceived(
+            ArchipelagoSession sourceSession,
+            ReceivedItemsHelper helper
+        )
+        {
+            if (helper == null || !IsCurrentSession(sourceSession))
+            {
+                return;
+            }
+
+            try
+            {
+                while (helper.Any())
+                {
+                    helper.DequeueItem();
+                }
+                RequestReceivedItemsRefresh();
+            }
+            catch (Exception ex)
+            {
+                RequestReceivedItemsRefresh();
+                RandomizerPlugin.Log?.LogError(
+                    "[RANDOMIZER] Received-item callback failed: " + ex
+                );
+            }
+        }
+
+        private void HandleMessageReceived(
+            ArchipelagoSession sourceSession,
+            LogMessage message
+        )
+        {
+            // Hint and !getitem messages derive from ItemSendLogMessage too.
+            // Only the server message for a real item send belongs in
+            // the gameplay notification queue.
+            if (!IsCurrentReadySession(sourceSession) || message == null ||
+                message.GetType() != typeof(ItemSendLogMessage))
+            {
+                return;
+            }
+
+            ItemSendLogMessage itemSend = (ItemSendLogMessage)message;
+            if (!itemSend.IsSenderTheActivePlayer ||
+                itemSend.IsReceiverTheActivePlayer ||
+                itemSend.Receiver == null ||
+                itemSend.Item == null)
+            {
+                return;
+            }
+
+            string itemName = itemSend.Item.ItemName;
+            if (string.IsNullOrWhiteSpace(itemName))
+            {
+                itemName = itemSend.Item.ItemDisplayName;
+            }
+            if (string.IsNullOrWhiteSpace(itemName))
+            {
+                itemName = "Item " + itemSend.Item.ItemId;
+            }
+
+            string recipientName = itemSend.Receiver.Alias;
+            if (string.IsNullOrWhiteSpace(recipientName))
+            {
+                recipientName = itemSend.Receiver.Name;
+            }
+            if (string.IsNullOrWhiteSpace(recipientName))
+            {
+                recipientName = "Player " + itemSend.Receiver.Slot;
+            }
+
+            Action<string, ItemFlags> handler = OnItemSent;
+            if (handler == null)
+            {
+                return;
+            }
+
+            try
+            {
+                handler(
+                    "Sent " + itemName + " to " + recipientName,
+                    itemSend.Item.Flags
+                );
+            }
+            catch
+            {
+            }
+        }
+
+        private void OnCheckedLocationsUpdated(
+            ArchipelagoSession sourceSession,
+            ReadOnlyCollection<long> newCheckedLocations
+        )
+        {
+            if (newCheckedLocations == null ||
+                !IsCurrentSession(sourceSession))
+            {
+                return;
+            }
+
+            foreach (long locationId in newCheckedLocations)
+            {
+                string locationName = GetLocationName(
+                    sourceSession,
+                    locationId
+                );
+                MarkLocationUnlocked(locationName, locationId);
+            }
+
+            RequestCheckedLocationsRefresh();
+        }
+
+        private void CaptureRoomLocations(
+            ArchipelagoSession sourceSession
+        )
+        {
+            if (!IsCurrentSession(sourceSession))
+            {
+                return;
+            }
+
+            HashSet<string> captured =
+                new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (long locationId in sourceSession.Locations.AllLocations)
+            {
+                string locationName = GetLocationName(
+                    sourceSession,
+                    locationId
+                );
+                if (!string.IsNullOrWhiteSpace(locationName))
+                {
+                    captured.Add(locationName);
+                }
+            }
+
+            lock (stateLock)
+            {
+                roomLocationNames.Clear();
+                roomLocationNames.UnionWith(captured);
+            }
+        }
+
+        private void RefreshCheckedLocations(
+            ArchipelagoSession sourceSession
+        )
+        {
+            if (!IsCurrentSession(sourceSession))
+            {
+                return;
+            }
+
+            foreach (long locationId in
+                sourceSession.Locations.AllLocationsChecked)
+            {
+                string locationName = GetLocationName(
+                    sourceSession,
+                    locationId
+                );
+                MarkLocationUnlocked(locationName, locationId);
+            }
+        }
+
+        private void FlushPendingLocations()
+        {
+            if (!Connected)
+            {
+                return;
+            }
+
+            string[] pending;
+
+            lock (stateLock)
+            {
+                pending = pendingLocationNames.ToArray();
+            }
+
+            List<KeyValuePair<string, long>> resolved =
+                new List<KeyValuePair<string, long>>();
+
+            foreach (string locationName in pending)
+            {
+                long locationId = GetLocationId(locationName);
+                if (locationId >= 0)
+                {
+                    resolved.Add(new KeyValuePair<string, long>(locationName, locationId));
+                }
+            }
+
+            if (resolved.Count > 0)
+            {
+                try
+                {
+                    session.Locations.CompleteLocationChecks(
+                        resolved.Select(entry => entry.Value).ToArray()
+                    );
+
+                    foreach (KeyValuePair<string, long> entry in resolved)
+                    {
+                        MarkLocationUnlocked(entry.Key, entry.Value);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LastError = "Offline checks remain queued: " + ex.Message;
+                    ReportStatus(LastError);
+                }
+            }
+
+            if (goalStatusPending || (SaveState.Instance != null && SaveState.Instance.goalCompleted))
+            {
+                SendGoalStatus();
+            }
+        }
+
+        private void QueueUnprocessedReceivedItems(
+            ArchipelagoSession sourceSession,
+            IReadOnlyList<ItemInfo> allItems
+        )
+        {
+            if (!IsCurrentReadySession(sourceSession) ||
+                SaveState.Instance == null ||
+                RandomizerPlugin.Instance == null ||
+                allItems == null)
+            {
+                return;
+            }
+
+            if (SaveState.Instance.IsRoomBound &&
+                !SaveState.Instance.MatchesRoom(this))
+            {
+                return;
+            }
+
+            List<ReceivedItemReceipt> receipts = ReceivedItemReceipt.FromServer(allItems, GetItemName);
+            List<Tuple<int, string, ItemFlags, ReceivedItemReceipt>> itemsToQueue =
+                new List<Tuple<int, string, ItemFlags, ReceivedItemReceipt>>();
+
+            lock (stateLock)
+            {
+                SaveState activeState = SaveState.Instance;
+                if (activeState == null)
+                {
+                    return;
+                }
+
+                if (!ReferenceEquals(queuedForSaveState, activeState))
+                {
+                    queuedForSaveState = activeState;
+                    lastQueuedItemIndex = activeState.NextReceivedItemIndex;
+                }
+
+                if (!activeState.receivedItemReceiptsInitialized &&
+                    !activeState.TrySynchronizeReceivedReceipts(receipts))
+                {
+                    RandomizerPlugin.Instance.ReportBlockingError("Could not reconcile received AP items.");
+                    return;
+                }
+                int firstIndex = Math.Max(activeState.NextReceivedItemIndex, lastQueuedItemIndex);
+                for (int index = firstIndex; index < allItems.Count; index++)
+                {
+                    itemsToQueue.Add(Tuple.Create(
+                        index,
+                        GetItemName(allItems[index]),
+                        allItems[index].Flags,
+                        receipts[index]
+                    ));
+                }
+
+                lastQueuedItemIndex = Math.Max(lastQueuedItemIndex, allItems.Count);
+            }
+
+            foreach (Tuple<int, string, ItemFlags, ReceivedItemReceipt> queuedItem in itemsToQueue)
+            {
+                RandomizerPlugin.Instance.QueueReceivedItem(
+                    queuedItem.Item1,
+                    queuedItem.Item2,
+                    queuedItem.Item3,
+                    queuedItem.Item4
+                );
+            }
+        }
+
+        private void SendGoalStatus()
+        {
+            if (!Connected)
+            {
+                goalStatusPending = true;
+                return;
+            }
+
+            try
+            {
+                session.SetGoalAchieved();
+                goalStatusPending = false;
+            }
+            catch (Exception ex)
+            {
+                goalStatusPending = true;
+                LastError = "Goal completion is queued for reconnect: " + ex.Message;
+                ReportStatus(LastError);
+            }
+        }
+
+        private void MarkItemUnlocked(ItemInfo item, bool raiseEvent)
+        {
+            AddReceivedItem(GetItemName(item), raiseEvent);
+        }
+
+        private string GetItemName(ItemInfo item)
+        {
+            if (item == null)
+            {
+                return null;
+            }
+
+            string itemName = item.ItemName;
+            if (string.IsNullOrWhiteSpace(itemName))
+            {
+                itemName = item.ItemDisplayName;
+            }
+
+            if (string.IsNullOrWhiteSpace(itemName))
+            {
+                itemName = "Item " + item.ItemId;
+            }
+
+            return ItemSet.GetCanonicalItemName(itemName);
+        }
+
+        private void AddReceivedItem(string itemName, bool raiseEvent)
+        {
+            if (string.IsNullOrWhiteSpace(itemName))
+            {
+                return;
+            }
+
+            Action<string> handler = null;
+            string canonicalItemName =
+                ItemSet.GetCanonicalItemName(itemName);
+
+            lock (stateLock)
+            {
+                if (!unlockedItems.Add(canonicalItemName))
+                {
+                    return;
+                }
+
+                receivedItems.Add(canonicalItemName);
+
+                if (raiseEvent)
+                {
+                    handler = OnItemReceived;
+                }
+            }
+
+            if (handler == null)
+            {
+                return;
+            }
+
+            try
+            {
+                handler(canonicalItemName);
+            }
+            catch
+            {
+            }
+        }
+
+        private void MarkLocationUnlocked(string locationName, long locationId)
+        {
+            lock (stateLock)
+            {
+                if (!string.IsNullOrWhiteSpace(locationName))
+                {
+                    unlockedLocationNames.Add(locationName);
+                    pendingLocationNames.Remove(locationName);
+                }
+
+                if (locationId >= 0)
+                {
+                    unlockedLocationIds.Add(locationId);
+                }
+            }
+        }
+
+        private long GetLocationId(string locationName)
+        {
+            if (!Connected || string.IsNullOrWhiteSpace(locationName))
+            {
+                return -1;
+            }
+
+            foreach (
+                string roomLocationName
+                in LocationSet.GetRoomLocationNameCandidates(
+                    locationName
+                ))
+            {
+                try
+                {
+                    long locationId =
+                        session.Locations.GetLocationIdFromName(
+                            GetGameName(),
+                            roomLocationName
+                        );
+                    if (locationId >= 0)
+                    {
+                        return locationId;
+                    }
+                }
+                catch
+                {
+                    // A missing name is treated as an unavailable location.
+                }
+            }
+
+            return -1;
+        }
+
+        private string GetLocationName(
+            ArchipelagoSession sourceSession,
+            long locationId
+        )
+        {
+            if (sourceSession == null || locationId < 0)
+            {
+                return null;
+            }
+
+            string gameName = sourceSession.ConnectionInfo != null &&
+                !string.IsNullOrWhiteSpace(
+                    sourceSession.ConnectionInfo.Game
+                )
+                    ? sourceSession.ConnectionInfo.Game
+                    : configuredGameName;
+            try
+            {
+                return LocationSet.GetCanonicalLocationName(
+                    sourceSession.Locations.GetLocationNameFromId(
+                        locationId,
+                        gameName
+                    )
+                );
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private string GetLocationName(long locationId)
+        {
+            if (!IsConnected() || locationId < 0)
+            {
+                return null;
+            }
+
+            try
+            {
+                return LocationSet.GetCanonicalLocationName(
+                    session.Locations.GetLocationNameFromId(
+                        locationId,
+                        GetGameName()
+                    )
+                );
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private string GetGameName()
+        {
+            if (session != null &&
+                session.ConnectionInfo != null &&
+                !string.IsNullOrWhiteSpace(session.ConnectionInfo.Game))
+            {
+                return session.ConnectionInfo.Game;
+            }
+
+            return configuredGameName;
+        }
+
+        private bool IsConnected()
+        {
+            return session != null &&
+                   session.Socket != null &&
+                   session.Socket.Connected;
+        }
+
+        private bool IsCurrentSession(
+            ArchipelagoSession expectedSession
+        )
+        {
+            lock (connectionLock)
+            {
+                return ReferenceEquals(session, expectedSession) &&
+                       expectedSession != null &&
+                       expectedSession.Socket != null &&
+                       expectedSession.Socket.Connected;
+            }
+        }
+
+        private bool IsCurrentReadySession(
+            ArchipelagoSession expectedSession
+        )
+        {
+            lock (connectionLock)
+            {
+                return ReferenceEquals(session, expectedSession) &&
+                       sessionReady &&
+                       expectedSession != null &&
+                       expectedSession.Socket != null &&
+                       expectedSession.Socket.Connected;
+            }
+        }
+
+        private LoginSuccessful GetSlotDataAfterLogin(
+            ArchipelagoSession sourceSession,
+            LoginSuccessful login
+        )
+        {
+            if (login == null)
+            {
+                throw new FormatException(
+                    "The Archipelago server returned an invalid login reply."
+                );
+            }
+
+            Task<Dictionary<string, object>> request =
+                sourceSession.DataStorage.GetSlotDataAsync(login.Slot);
+            DateTime deadline = DateTime.UtcNow.AddMilliseconds(
+                SlotDataTimeoutMilliseconds
+            );
+            while (!request.IsCompleted)
+            {
+                if (!IsCurrentSession(sourceSession))
+                {
+                    throw new InvalidOperationException(
+                        "The Archipelago socket closed while receiving world data."
+                    );
+                }
+                if (DateTime.UtcNow >= deadline)
+                {
+                    throw new TimeoutException(
+                        "Timed out while receiving APWorld data."
+                    );
+                }
+
+                Thread.Sleep(25);
+            }
+
+            Dictionary<string, object> slotData =
+                request.GetAwaiter().GetResult();
+            if (slotData == null)
+            {
+                throw new FormatException(
+                    "The Archipelago server did not return APWorld data."
+                );
+            }
+
+            return new LoginSuccessful(
+                new ConnectedPacket
+                {
+                    Team = login.Team,
+                    Slot = login.Slot,
+                    SlotData = slotData
+                }
+            );
+        }
+
+        private static object GetRequiredSlotData(
+            LoginSuccessful login,
+            string key
+        )
+        {
+            if (login == null || login.SlotData == null)
+            {
+                throw new FormatException(
+                    "The APWorld connection did not provide slot data."
+                );
+            }
+
+            if (!login.SlotData.TryGetValue(key, out object value) ||
+                value == null)
+            {
+                throw new FormatException(
+                    "APWorld slot data is missing required setting '" +
+                    key + "'."
+                );
+            }
+
+            return value;
+        }
+
+        private static string GetRequiredStringSlotData(
+            LoginSuccessful login,
+            string key
+        )
+        {
+            object value = GetRequiredSlotData(login, key);
+            if (!(value is string text))
+            {
+                throw new FormatException(
+                    "APWorld setting '" + key + "' must be text."
+                );
+            }
+
+            return text;
+        }
+
+        private static JObject GetRequiredObjectSlotData(
+            LoginSuccessful login,
+            string key
+        )
+        {
+            object value = GetRequiredSlotData(login, key);
+            if (!(value is JObject objectValue))
+            {
+                throw new FormatException(
+                    "APWorld setting '" + key + "' must be an object."
+                );
+            }
+
+            return objectValue;
+        }
+
+        private static string GetWorldVersion(LoginSuccessful login)
+        {
+            return GetRequiredStringSlotData(login, "world_version");
+        }
+
+        private static string GetGoal(LoginSuccessful login)
+        {
+            return GetRequiredStringSlotData(login, "goal");
+        }
+
+        private static string GetSpellingBeePhrase(
+            LoginSuccessful login,
+            string goal)
+        {
+            if (login?.SlotData == null ||
+                !login.SlotData.TryGetValue(
+                    "spelling_bee_phrase",
+                    out object value
+                ) ||
+                value == null)
+            {
+                return string.Equals(
+                        goal,
+                        SpellingBeeGoal,
+                        StringComparison.Ordinal
+                    )
+                        ? "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        : string.Empty;
+            }
+            if (!(value is string phrase))
+            {
+                throw new FormatException(
+                    "APWorld setting 'spelling_bee_phrase' must be text."
+                );
+            }
+            return phrase;
+        }
+
+        private static IReadOnlyDictionary<string, ItemFlags>
+            GetCrestSlotItemFlags(LoginSuccessful login)
+        {
+            Dictionary<string, ItemFlags> flags =
+                new Dictionary<string, ItemFlags>(
+                    StringComparer.OrdinalIgnoreCase
+                );
+            if (login?.SlotData == null ||
+                !login.SlotData.TryGetValue(
+                    "crest_slot_item_flags",
+                    out object value
+                ) ||
+                value == null)
+            {
+                return new ReadOnlyDictionary<string, ItemFlags>(flags);
+            }
+            if (!(value is JObject flagObject))
+            {
+                throw new FormatException(
+                    "APWorld setting 'crest_slot_item_flags' must be an object."
+                );
+            }
+
+            foreach (JProperty property in flagObject.Properties())
+            {
+                int rawFlags = property.Value.ToObject<int>();
+                string locationName =
+                    LocationSet.GetCanonicalLocationName(property.Name);
+                if (rawFlags < 0 ||
+                    string.IsNullOrWhiteSpace(locationName))
+                {
+                    throw new FormatException(
+                        "APWorld crest slot item flags are invalid."
+                    );
+                }
+                flags[locationName] = (ItemFlags)rawFlags;
+            }
+            return new ReadOnlyDictionary<string, ItemFlags>(flags);
+        }
+
+        private static string GetStartingCrest(LoginSuccessful login)
+        {
+            return GetRequiredStringSlotData(login, "starting_crest");
+        }
+
+        private static string GetStartingLocation(LoginSuccessful login)
+        {
+            return GetRequiredStringSlotData(login, "starting_location");
+        }
+
+        private static string GetMapLogicPayloadJson(
+            LoginSuccessful login
+        )
+        {
+            Dictionary<string, object> payload =
+                new Dictionary<string, object>(
+                    StringComparer.Ordinal
+                );
+            payload["skips"] = GetIntegerSlotData(
+                login,
+                "skips",
+                0,
+                3
+            );
+            payload["scuttlebrace_logic"] = GetBooleanSlotData(
+                login,
+                "scuttlebrace_logic"
+            );
+            JObject compressedPayload = GetCompressedLogicPayload(login);
+            if (compressedPayload == null)
+            {
+                payload["requirements"] = GetRequiredObjectSlotData(
+                    login,
+                    "requirements"
+                );
+                payload["abstract_requirements"] = GetRequiredObjectSlotData(
+                    login,
+                    "abstract_requirements"
+                );
+                payload["logic_item_dependencies"] = GetRequiredObjectSlotData(
+                    login,
+                    "logic_item_dependencies"
+                );
+                payload["logic_events"] = GetOptionalArraySlotData(
+                    login,
+                    "logic_events"
+                );
+            }
+            else
+            {
+                payload["requirements"] = GetRequiredLogicPayloadObject(
+                    compressedPayload,
+                    "requirements"
+                );
+                payload["abstract_requirements"] =
+                    GetRequiredLogicPayloadObject(
+                        compressedPayload,
+                        "abstract_requirements"
+                    );
+                payload["logic_item_dependencies"] =
+                    GetRequiredLogicPayloadObject(
+                        compressedPayload,
+                        "logic_item_dependencies"
+                    );
+                payload["logic_events"] = GetOptionalLogicPayloadArray(
+                    compressedPayload,
+                    "logic_events"
+                );
+            }
+
+            return JsonConvert.SerializeObject(payload);
+        }
+
+        private static JObject GetCompressedLogicPayload(
+            LoginSuccessful login
+        )
+        {
+            if (login == null || login.SlotData == null)
+            {
+                throw new FormatException(
+                    "The APWorld connection did not provide slot data."
+                );
+            }
+
+            bool hasFormat = login.SlotData.TryGetValue(
+                "logic_payload_format",
+                out object formatValue
+            );
+            bool hasPayload = login.SlotData.TryGetValue(
+                "logic_payload",
+                out object payloadValue
+            );
+            if (!hasFormat && !hasPayload)
+            {
+                return null;
+            }
+            if (!hasFormat || !hasPayload)
+            {
+                throw new FormatException(
+                    "APWorld logic payload data is incomplete."
+                );
+            }
+            if (!(formatValue is string format) ||
+                !string.Equals(
+                    format,
+                    LogicPayloadFormat,
+                    StringComparison.Ordinal
+                ))
+            {
+                throw new FormatException(
+                    "APWorld logic payload format is not supported."
+                );
+            }
+            if (!(payloadValue is string encodedPayload) ||
+                string.IsNullOrWhiteSpace(encodedPayload))
+            {
+                throw new FormatException(
+                    "APWorld logic payload data is invalid."
+                );
+            }
+
+            byte[] compressed;
+            try
+            {
+                compressed = Convert.FromBase64String(encodedPayload);
+            }
+            catch (Exception ex)
+            {
+                throw new FormatException(
+                    "APWorld logic payload is not valid base64.",
+                    ex
+                );
+            }
+
+            try
+            {
+                using (MemoryStream input = new MemoryStream(compressed))
+                using (GZipStream gzip = new GZipStream(
+                    input,
+                    CompressionMode.Decompress
+                ))
+                using (MemoryStream output = new MemoryStream())
+                {
+                    byte[] buffer = new byte[8192];
+                    int read;
+                    while ((read = gzip.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        if (output.Length + read > MaximumLogicPayloadBytes)
+                        {
+                            throw new FormatException(
+                                "APWorld logic payload is too large."
+                            );
+                        }
+
+                        output.Write(buffer, 0, read);
+                    }
+
+                    return JObject.Parse(
+                        Encoding.UTF8.GetString(output.ToArray())
+                    );
+                }
+            }
+            catch (FormatException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new FormatException(
+                    "APWorld logic payload could not be read.",
+                    ex
+                );
+            }
+        }
+
+        private static JObject GetRequiredLogicPayloadObject(
+            JObject payload,
+            string key
+        )
+        {
+            JToken value = payload[key];
+            if (!(value is JObject objectValue))
+            {
+                throw new FormatException(
+                    "APWorld logic payload is missing required setting '" +
+                    key + "'."
+                );
+            }
+
+            return objectValue;
+        }
+
+        private static JArray GetOptionalArraySlotData(
+            LoginSuccessful login,
+            string key
+        )
+        {
+            if (login?.SlotData == null ||
+                !login.SlotData.TryGetValue(key, out object value) ||
+                value == null)
+            {
+                return new JArray();
+            }
+            if (value is JArray arrayValue)
+            {
+                return arrayValue;
+            }
+            throw new FormatException(
+                "APWorld setting '" + key + "' must be an array."
+            );
+        }
+
+        private static JArray GetOptionalLogicPayloadArray(
+            JObject payload,
+            string key
+        )
+        {
+            JToken value = payload?[key];
+            if (value == null || value.Type == JTokenType.Null)
+            {
+                return new JArray();
+            }
+            if (value is JArray arrayValue)
+            {
+                return arrayValue;
+            }
+            throw new FormatException(
+                "APWorld logic payload setting '" + key +
+                "' must be an array."
+            );
+        }
+
+        private static IReadOnlyDictionary<string, string>
+            GetRandomizedItemMarkerLocations(LoginSuccessful login)
+        {
+            const string key = "randomized_item_marker_locations";
+            Dictionary<string, string> result =
+                new Dictionary<string, string>(
+                    StringComparer.OrdinalIgnoreCase
+                );
+            JObject locations = GetRequiredObjectSlotData(login, key);
+
+            foreach (JProperty property in locations.Properties())
+            {
+                if (property.Value.Type != JTokenType.String ||
+                    string.IsNullOrWhiteSpace(property.Name) ||
+                    string.IsNullOrWhiteSpace(
+                        property.Value.Value<string>()))
+                {
+                    throw new FormatException(
+                        "APWorld setting '" + key +
+                        "' must map item names to location names."
+                    );
+                }
+
+                result[ItemSet.GetCanonicalItemName(property.Name)] =
+                    LocationSet.GetCanonicalLocationName(
+                        property.Value.Value<string>()
+                    );
+            }
+
+            return new ReadOnlyDictionary<string, string>(result);
+        }
+
+        private static bool GetBooleanSlotData(
+            LoginSuccessful login,
+            string key
+        )
+        {
+            object value = GetRequiredSlotData(login, key);
+            if (value is bool boolean)
+            {
+                return boolean;
+            }
+
+            throw new FormatException(
+                "APWorld setting '" + key + "' must be true or false."
+            );
+        }
+
+        private static int GetIntegerSlotData(
+            LoginSuccessful login,
+            string key,
+            int minimum,
+            int maximum
+        )
+        {
+            object value = GetRequiredSlotData(login, key);
+            if (!(value is long integer) ||
+                integer < minimum ||
+                integer > maximum)
+            {
+                throw new FormatException(
+                    "APWorld setting '" + key + "' must be between " +
+                    minimum + " and " + maximum + " as an integer."
+                );
+            }
+
+            return (int)integer;
+        }
+
+        private static RandomizationMode GetRandomizationModeSlotData(
+            LoginSuccessful login,
+            string key
+        )
+        {
+            string value = GetRequiredStringSlotData(login, key);
+            switch (value)
+            {
+                case "vanilla":
+                    return RandomizationMode.Vanilla;
+                case "anywhere":
+                    return RandomizationMode.Anywhere;
+                case "shuffle":
+                    return RandomizationMode.Shuffle;
+                default:
+                    throw new FormatException(
+                        "APWorld setting '" + key + "' has invalid mode '" +
+                        value + "'."
+                    );
+            }
+        }
+
+        private static string GetDeathLinkCocoonMode(
+            LoginSuccessful login
+        )
+        {
+            const string key = "death_link_cocoon";
+            string value = GetRequiredStringSlotData(login, key);
+            switch (value)
+            {
+                case DeathLinkCocoonVanilla:
+                case DeathLinkCocoonless:
+                case DeathLinkCocoonProtected:
+                    return value;
+                default:
+                    throw new FormatException(
+                        "APWorld setting '" + key +
+                        "' has invalid mode '" + value + "'."
+                    );
+            }
+        }
+
+        private static CheckMapMarkerMode GetCheckMapMarkerMode(
+            LoginSuccessful login
+        )
+        {
+            const string key = "check_map_markers";
+            string value = GetRequiredStringSlotData(login, key);
+            switch (value)
+            {
+                case "off":
+                    return CheckMapMarkerMode.Off;
+                case "mapped_rooms":
+                    return CheckMapMarkerMode.MappedRooms;
+                case "owned_maps":
+                    return CheckMapMarkerMode.OwnedMaps;
+                case "all":
+                    return CheckMapMarkerMode.All;
+                default:
+                    throw new FormatException(
+                        "APWorld setting '" + key +
+                        "' has invalid mode '" + value + "'."
+                    );
+            }
+        }
+
+        private static IReadOnlyList<VogAreaHint> GetVogAreaHints(JObject plan)
+        {
+            if (plan["format"]?.Value<string>() != "area_counts_v1" ||
+                !(plan["area_locations"] is JObject areas))
+            {
+                throw new FormatException("Unsupported Vog area hint format.");
+            }
+            var result = new List<VogAreaHint>();
+            foreach (JProperty area in areas.Properties().OrderBy(p => p.Name, StringComparer.Ordinal))
+            {
+                if (string.IsNullOrWhiteSpace(area.Name) || !(area.Value is JArray locations) ||
+                    locations.Count == 0 || locations.Any(value => value.Type != JTokenType.String ||
+                        string.IsNullOrWhiteSpace(value.Value<string>())))
+                {
+                    throw new FormatException("Invalid Vog area locations.");
+                }
+                result.Add(new VogAreaHint
+                {
+                    area = area.Name,
+                    locations = locations.Values<string>().Select(LocationSet.GetCanonicalLocationName)
+                        .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(name => name, StringComparer.Ordinal).ToList()
+                });
+            }
+            return result;
+        }
+
+        private static int GetVogHintPlanInteger(
+            LoginSuccessful login,
+            string valueName,
+            int minimum,
+            int maximum
+        )
+        {
+            JObject plan = GetRequiredObjectSlotData(login, "vog_hints");
+            JToken rawValue = plan[valueName];
+            if (rawValue == null || rawValue.Type == JTokenType.Null)
+            {
+                throw new FormatException(
+                    "APWorld slot data is missing required setting '" +
+                    "vog_hints." + valueName + "'."
+                );
+            }
+
+            if (rawValue.Type != JTokenType.Integer ||
+                rawValue.Value<long>() < minimum ||
+                rawValue.Value<long>() > maximum)
+            {
+                throw new FormatException(
+                    "APWorld setting 'vog_hints." + valueName +
+                    "' must be between " + minimum + " and " + maximum +
+                    " as an integer."
+                );
+            }
+
+            return rawValue.Value<int>();
+        }
+
+        private static string GetEnemyRosaryMultiplier(
+            LoginSuccessful login
+        )
+        {
+            return GetEnemyDropMultiplier(
+                login,
+                "enemy_rosary_multiplier",
+                "Rosary"
+            );
+        }
+
+        private static string GetPurchasePriceMode(
+            LoginSuccessful login,
+            string key
+        )
+        {
+            string value = GetRequiredStringSlotData(login, key);
+            if (IsSupportedPurchasePriceMode(value))
+            {
+                return value;
+            }
+
+            throw new FormatException(
+                "APWorld setting '" + key +
+                "' has invalid price mode '" + value + "'."
+            );
+        }
+
+        private static IReadOnlyDictionary<string, int>
+            GetPurchasePrices(LoginSuccessful login)
+        {
+            const string key = "purchase_prices";
+            Dictionary<string, int> result =
+                new Dictionary<string, int>(StringComparer.Ordinal);
+            JObject prices = GetRequiredObjectSlotData(login, key);
+
+            foreach (JProperty property in prices.Properties())
+            {
+                string priceKey = property.Name ?? string.Empty;
+                if (!IsSupportedPurchasePriceKey(priceKey) ||
+                    property.Value.Type != JTokenType.Integer ||
+                    property.Value.Value<long>() < 0 ||
+                    property.Value.Value<long>() > 2000)
+                {
+                    throw new FormatException(
+                        "APWorld purchase price '" + priceKey +
+                        "' has invalid value '" + property.Value + "'."
+                    );
+                }
+
+                result.Add(priceKey, property.Value.Value<int>());
+            }
+
+            return new ReadOnlyDictionary<string, int>(result);
+        }
+
+        private static string GetEnemyShardMultiplier(
+            LoginSuccessful login
+        )
+        {
+            return GetEnemyDropMultiplier(
+                login,
+                "enemy_shard_multiplier",
+                "Shell Shard"
+            );
+        }
+
+        private static string GetEnemyDropMultiplier(
+            LoginSuccessful login,
+            string key,
+            string displayName
+        )
+        {
+            string value = GetRequiredStringSlotData(login, key);
+            if (IsSupportedEnemyDropMultiplier(value))
+            {
+                return value;
+            }
+
+            throw new FormatException(
+                "APWorld " + displayName + " setting '" + key +
+                "' has invalid value '" +
+                value + "'."
+            );
+        }
+
+        private static string GetBellwayAccess(
+            LoginSuccessful login
+        )
+        {
+            const string key = "bellway_access";
+            string value = GetRequiredStringSlotData(login, key);
+            if (IsSupportedBellwayAccess(value))
+            {
+                return value;
+            }
+
+            throw new FormatException(
+                "APWorld setting '" + key + "' has invalid value '" +
+                value + "'."
+            );
+        }
+
+        private static string GetTrailsEndRequirement(
+            LoginSuccessful login
+        )
+        {
+            const string key = "trails_end_requirement";
+            string value = GetRequiredStringSlotData(login, key);
+            if (IsSupportedTrailsEndRequirement(value))
+            {
+                return value;
+            }
+
+            throw new FormatException(
+                "APWorld setting '" + key + "' has invalid value '" +
+                value + "'."
+            );
+        }
+
+        internal static bool IsSupportedBellwayAccess(
+            string value
+        )
+        {
+            return string.Equals(
+                       value,
+                       BellwayAccessBellBeastRequired,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       BellwayAccessRandomizedStations,
+                       StringComparison.Ordinal
+                   );
+        }
+
+        internal static bool IsSupportedTrailsEndRequirement(
+            string value
+        )
+        {
+            return string.Equals(
+                       value,
+                       TrailsEndRequirementShakraStock,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       TrailsEndRequirementOwnedMaps,
+                       StringComparison.Ordinal
+                   );
+        }
+
+        internal static bool IsSupportedEnemyRosaryMultiplier(
+            string value
+        )
+        {
+            return IsSupportedEnemyDropMultiplier(value);
+        }
+
+        internal static bool IsSupportedEnemyShardMultiplier(
+            string value
+        )
+        {
+            return IsSupportedEnemyDropMultiplier(value);
+        }
+
+        internal static bool IsSupportedPurchasePriceMode(string value)
+        {
+            return string.Equals(
+                       value,
+                       PriceModeVanilla,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       PriceModeFree,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       PriceModeShuffle,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       PriceModeCheap,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       PriceModeExpensive,
+                       StringComparison.Ordinal
+                   );
+        }
+
+        private static bool IsSupportedPurchasePriceKey(string value)
+        {
+            return !string.IsNullOrWhiteSpace(value) &&
+                   (
+                       value.StartsWith("shop:", StringComparison.Ordinal) ||
+                       value.StartsWith(
+                           "bellway:",
+                           StringComparison.Ordinal
+                       ) ||
+                       value.StartsWith(
+                           "upgrade:plinney:",
+                           StringComparison.Ordinal
+                       ) ||
+                       value.StartsWith(
+                           "donation:",
+                           StringComparison.Ordinal
+                       ) ||
+                       string.Equals(
+                           value,
+                           "vog:area",
+                           StringComparison.Ordinal
+                       )
+                   );
+        }
+
+        private static bool IsSupportedEnemyDropMultiplier(
+            string value
+        )
+        {
+            return string.Equals(
+                       value,
+                       RosaryMultiplierVanilla,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       RosaryMultiplierOneAndHalf,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       RosaryMultiplierDouble,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       RosaryMultiplierTriple,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       RosaryMultiplierQuintuple,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       RosaryMultiplierTenfold,
+                       StringComparison.Ordinal
+                   );
+        }
+
+        internal static bool IsSupportedGoal(string goal)
+        {
+            return string.Equals(goal, ActOneGoal, StringComparison.Ordinal) ||
+                   string.Equals(goal, ActTwoGoal, StringComparison.Ordinal) ||
+                   string.Equals(goal, ActThreeGoal, StringComparison.Ordinal) ||
+                   string.Equals(
+                       goal,
+                       CursedEndingGoal,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       goal,
+                       FleaHuntGoal,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(goal, SpellingBeeGoal, StringComparison.Ordinal);
+        }
+
+        internal static bool IsSupportedFleaHuntGoalCount(int count)
+        {
+            return count >= MinimumFleaHuntGoalCount &&
+                   count <= MaximumFleaHuntGoalCount;
+        }
+
+        internal static bool IsSupportedStartingLocation(string value)
+        {
+            return string.Equals(
+                       value,
+                       StartingLocationVanilla,
+                       StringComparison.Ordinal
+                   ) ||
+                   string.Equals(
+                       value,
+                       StartingLocationBoneBottom,
+                       StringComparison.Ordinal
+                   );
+        }
+
+        internal static bool IsSupportedWorldVersion(string worldVersion)
+        {
+            return string.Equals(
+                worldVersion,
+                RandomizerPlugin.PluginVersion,
+                StringComparison.Ordinal
+            );
+        }
+
+        private static bool IsDeterministicLoginFailure(
+            LoginFailure failure,
+            bool preserveState
+        )
+        {
+            if (failure?.ErrorCodes == null)
+            {
+                return false;
+            }
+
+            foreach (ConnectionRefusedError error in failure.ErrorCodes)
+            {
+                switch (error)
+                {
+                    case ConnectionRefusedError.SlotAlreadyTaken:
+                        return !preserveState;
+                    case ConnectionRefusedError.InvalidSlot:
+                    case ConnectionRefusedError.InvalidGame:
+                    case ConnectionRefusedError.IncompatibleVersion:
+                    case ConnectionRefusedError.InvalidPassword:
+                    case ConnectionRefusedError.InvalidItemsHandling:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool TryHandleUnexpectedDisconnect(
+            ArchipelagoSession sourceSession,
+            string status
+        )
+        {
+            lock (connectionLock)
+            {
+                if (!ReferenceEquals(session, sourceSession) || !sessionReady)
+                {
+                    return false;
+                }
+
+                sessionReady = false;
+                DeathLinkManager.Reset();
+                SilkLinkManager.Reset();
+                KnockbackLinkManager.Reset();
+                CurrencyLinkManager.Reset();
+                Patches.VogHintManager.Reset();
+                LastError = status;
+                RandomizerPlugin plugin = RandomizerPlugin.Instance;
+                plugin?.RequestDisconnectSave();
+                plugin?.RequestAutomaticReconnect();
+                ReportStatus(LastError);
+                return true;
+            }
+        }
+
+        private void OnSocketClosed(
+            ArchipelagoSession sourceSession,
+            string reason
+        )
+        {
+            string status = string.IsNullOrWhiteSpace(reason)
+                ? "Disconnected from Archipelago."
+                : "Disconnected from Archipelago: " + reason;
+            TryHandleUnexpectedDisconnect(sourceSession, status);
+        }
+
+        private void OnSocketError(
+            ArchipelagoSession sourceSession,
+            Exception exception,
+            string message
+        )
+        {
+            string detail = !string.IsNullOrWhiteSpace(message)
+                ? message
+                : exception == null
+                    ? "Unknown socket error."
+                    : exception.Message;
+            string status = "Archipelago network error: " + detail;
+            bool disconnected = sourceSession.Socket == null ||
+                !sourceSession.Socket.Connected ||
+                IsTerminalTransportException(exception);
+            if (disconnected)
+            {
+                if (!TryHandleUnexpectedDisconnect(
+                        sourceSession,
+                        status
+                    ))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                lock (connectionLock)
+                {
+                    if (!ReferenceEquals(session, sourceSession))
+                    {
+                        return;
+                    }
+
+                    LastError = status;
+                    ReportStatus(LastError);
+                }
+            }
+
+            if (exception != null)
+            {
+                RandomizerPlugin.Log?.LogError(
+                    "[RANDOMIZER] Archipelago socket error: " + exception
+                );
+            }
+        }
+
+        private static bool IsTerminalTransportException(
+            Exception exception
+        )
+        {
+            if (exception == null)
+            {
+                return false;
+            }
+
+            Queue<Exception> pending = new Queue<Exception>();
+            HashSet<Exception> visited = new HashSet<Exception>();
+            pending.Enqueue(exception);
+            while (pending.Count > 0)
+            {
+                Exception current = pending.Dequeue();
+                if (current == null || !visited.Add(current))
+                {
+                    continue;
+                }
+
+                if (current is IOException ||
+                    current is System.Net.WebSockets.WebSocketException ||
+                    current is System.Net.Sockets.SocketException ||
+                    current is global::Archipelago.MultiClient.Net.Exceptions.ArchipelagoSocketClosedException ||
+                    current is TimeoutException ||
+                    current is ObjectDisposedException)
+                {
+                    return true;
+                }
+
+                if (current is AggregateException aggregate)
+                {
+                    foreach (Exception inner in aggregate.InnerExceptions)
+                    {
+                        if (inner != null)
+                        {
+                            pending.Enqueue(inner);
+                        }
+                    }
+                }
+
+                if (current.InnerException != null)
+                {
+                    pending.Enqueue(current.InnerException);
+                }
+            }
+
+            return false;
+        }
+
+        private void ReportStatus(string status)
+        {
+            Action<string> handler = ConnectionStatusChanged;
+            if (handler == null)
+            {
+                return;
+            }
+
+            try
+            {
+                handler(status);
+            }
+            catch
+            {
+            }
+        }
+
+        private void ResetConnectionTransientState()
+        {
+            lock (stateLock)
+            {
+                pendingHints.Clear();
+                trackedHintUpdates.Clear();
+                hintScoutChannel = new HintScoutChannel();
+            }
+        }
+
+        private void ClearState()
+        {
+            lock (stateLock)
+            {
+                unlockedItems.Clear();
+                receivedItems.Clear();
+                unlockedLocationNames.Clear();
+                unlockedLocationIds.Clear();
+                pendingLocationNames.Clear();
+                roomLocationNames.Clear();
+                pendingHints.Clear();
+                trackedHintUpdates.Clear();
+                hintScoutChannel = new HintScoutChannel();
+                lastQueuedItemIndex = 0;
+                queuedForSaveState = null;
+            }
+
+            RoomSeed = string.Empty;
+            SlotName = string.Empty;
+            Team = -1;
+            Slot = -1;
+            WorldVersion = string.Empty;
+            Goal = string.Empty;
+            SpellingBeePhrase = string.Empty;
+            FleaHuntGoalCount = DefaultFleaHuntGoalCount;
+            StartingLocation = StartingLocationVanilla;
+            StartingCrest = string.Empty;
+            SplitDashAndSprint = false;
+            LedgegrabAbilityRando = false;
+            SwimAbilityRando = false;
+            ScuttlebraceLogic = true;
+            StartWithMaps = false;
+            StartFullyMapped = false;
+            AutomaticCompass = false;
+            CheckMapMarkers = CheckMapMarkerMode.Off;
+            RandomizedBellMarkers = false;
+            RandomizedMelodyMarkers = false;
+            RandomizedItemMarkerLocations =
+                new ReadOnlyDictionary<string, string>(
+                    new Dictionary<string, string>(
+                        StringComparer.OrdinalIgnoreCase
+                    )
+                );
+            VogAreaHintCount = 0;
+            VogAreaHints = Array.Empty<VogAreaHint>();
+            BellwayAccess = BellwayAccessBellBeastRequired;
+            SilkAndSoulPoints = 17;
+            TrailsEndRequirement = TrailsEndRequirementShakraStock;
+            EnemyRosaryMultiplier = RosaryMultiplierVanilla;
+            EnemyShardMultiplier = RosaryMultiplierVanilla;
+            NormalShopPrices = PriceModeVanilla;
+            BellwayPrices = PriceModeVanilla;
+            MapPrices = PriceModeVanilla;
+            PinPrices = PriceModeVanilla;
+            UpgradePrices = PriceModeVanilla;
+            DonationPrices = PriceModeVanilla;
+            VogHintPrices = PriceModeVanilla;
+            PurchasePrices = new ReadOnlyDictionary<string, int>(
+                new Dictionary<string, int>(StringComparer.Ordinal)
+            );
+            FasterDialogue = false;
+            AlphabetMode = false;
+            CrestSlotItemFlags =
+                new ReadOnlyDictionary<string, ItemFlags>(
+                    new Dictionary<string, ItemFlags>(
+                        StringComparer.OrdinalIgnoreCase
+                    )
+                );
+            DeathLink = false;
+            DeathLinkCocoon = DeathLinkCocoonProtected;
+            KnockbackLink = false;
+            SilkLink = false;
+            RosaryLink = false;
+            ShellShardLink = false;
+            IndividualRelicTurnIns = false;
+            MapLogicPayloadJson = string.Empty;
+            SkillRandomization = RandomizationMode.Anywhere;
+            ToolRandomization = RandomizationMode.Anywhere;
+            SilkSkillRandomization = RandomizationMode.Anywhere;
+            CrestRandomization = RandomizationMode.Anywhere;
+            EvaRandomization = RandomizationMode.Vanilla;
+            SoulRandomization = RandomizationMode.Vanilla;
+            OldHeartRandomization = RandomizationMode.Vanilla;
+            TwistedBudRandomization = RandomizationMode.Vanilla;
+            FleaRandomization = RandomizationMode.Anywhere;
+            CrestSlotRandomization = RandomizationMode.Anywhere;
+            MaskShardRandomization = RandomizationMode.Anywhere;
+            SpoolFragmentRandomization = RandomizationMode.Anywhere;
+            SilkHeartRandomization = RandomizationMode.Anywhere;
+            BellwayRandomization = RandomizationMode.Anywhere;
+            VentricaRandomization = RandomizationMode.Anywhere;
+            MapRandomization = RandomizationMode.Anywhere;
+            NeedleUpgradeRandomization = RandomizationMode.Vanilla;
+            PaleOilRandomization = RandomizationMode.Vanilla;
+            MelodyRandomization = RandomizationMode.Vanilla;
+            PinRandomization = RandomizationMode.Anywhere;
+            RelicRandomization = RandomizationMode.Anywhere;
+            CraftingKitRandomization = RandomizationMode.Anywhere;
+            MinorPickupRandomization = RandomizationMode.Vanilla;
+            LoreTabletRandomization = RandomizationMode.Vanilla;
+            SimpleKeyRandomization = RandomizationMode.Vanilla;
+            PollipHeartRandomization = RandomizationMode.Vanilla;
+            ToolPouchRandomization = RandomizationMode.Vanilla;
+            BossSanity = RandomizationMode.Anywhere;
+            BellShrineSanity = RandomizationMode.Anywhere;
+            QuestSanity = RandomizationMode.Anywhere;
+            goalStatusPending = false;
+            sessionReady = false;
+        }
+
+        public HintData GetHint(string locationName)
+        {
+            if (!Connected || string.IsNullOrWhiteSpace(locationName))
+            {
+                return null;
+            }
+            locationName =
+                LocationSet.GetCanonicalLocationName(locationName);
+
+            Task<HintData> request = RequestHintAsync(locationName);
+
+            if (request == null || !request.IsCompleted)
+            {
+                return null;
+            }
+
+            ReleaseHintRequest(locationName, request);
+
+            if (request.IsCanceled || request.IsFaulted)
+            {
+                return null;
+            }
+
+            return request.GetAwaiter().GetResult();
+        }
+
+        internal Task<HintData> RequestHintAsync(string locationName)
+        {
+            if (!Connected || string.IsNullOrWhiteSpace(locationName))
+            {
+                return null;
+            }
+
+            locationName =
+                LocationSet.GetCanonicalLocationName(locationName);
+            lock (stateLock)
+            {
+                if (!pendingHints.TryGetValue(
+                        locationName,
+                        out Task<HintData> request))
+                {
+                    request = FetchHintAsync(
+                        locationName,
+                        HintCreationPolicy.CreateAndAnnounceOnce
+                    );
+                    pendingHints[locationName] = request;
+                }
+
+                return request;
+            }
+        }
+
+        internal Task<Dictionary<string, HintData>> RequestHintsAsync(
+            IEnumerable<string> locationNames,
+            HintCreationPolicy hintCreationPolicy,
+            string requestPurpose)
+        {
+            return FetchHintsAsync(
+                locationNames,
+                hintCreationPolicy,
+                requestPurpose
+            );
+        }
+
+        internal void ReleaseHintRequest(
+            string locationName,
+            Task<HintData> request)
+        {
+            if (request == null ||
+                !request.IsCompleted ||
+                string.IsNullOrWhiteSpace(locationName))
+            {
+                return;
+            }
+
+            locationName =
+                LocationSet.GetCanonicalLocationName(locationName);
+            lock (stateLock)
+            {
+                if (pendingHints.TryGetValue(
+                        locationName,
+                        out Task<HintData> currentRequest) &&
+                    ReferenceEquals(currentRequest, request))
+                {
+                    pendingHints.Remove(locationName);
+                }
+            }
+        }
+
+        private async Task<HintData> FetchHintAsync(
+            string locationName,
+            HintCreationPolicy hintCreationPolicy
+        )
+        {
+            Dictionary<string, HintData> hints = await FetchHintsAsync(
+                new[] { locationName },
+                hintCreationPolicy,
+                "hint for " + locationName
+            ).ConfigureAwait(false);
+            string canonicalLocationName =
+                LocationSet.GetCanonicalLocationName(locationName);
+            return hints.TryGetValue(
+                    canonicalLocationName,
+                    out HintData hint
+                )
+                ? hint
+                : null;
+        }
+
+        private async Task<Dictionary<string, HintData>> FetchHintsAsync(
+            IEnumerable<string> locationNames,
+            HintCreationPolicy hintCreationPolicy,
+            string requestPurpose
+        )
+        {
+            Dictionary<string, HintData> hints =
+                new Dictionary<string, HintData>(
+                    StringComparer.OrdinalIgnoreCase
+                );
+            if (!Connected || locationNames == null)
+            {
+                return hints;
+            }
+
+            HintScoutChannel scoutChannel = hintScoutChannel;
+            if (scoutChannel.Poisoned)
+            {
+                RandomizerPlugin.Log?.LogWarning(
+                    "[RANDOMIZER] Cannot scout " + requestPurpose +
+                    " because a previous scout timed out. Reconnect to " +
+                    "Archipelago before retrying."
+                );
+                return hints;
+            }
+
+            bool gateAcquired = false;
+            try
+            {
+                gateAcquired = await scoutChannel.Gate.WaitAsync(
+                    HintScoutTimeoutMilliseconds
+                ).ConfigureAwait(false);
+                if (!gateAcquired)
+                {
+                    RandomizerPlugin.Log?.LogWarning(
+                        "[RANDOMIZER] Timed out waiting to scout " +
+                        requestPurpose + "."
+                    );
+                    return hints;
+                }
+
+                if (!ReferenceEquals(
+                        scoutChannel,
+                        hintScoutChannel
+                    ) ||
+                    scoutChannel.Poisoned ||
+                    !Connected)
+                {
+                    return hints;
+                }
+
+                Dictionary<string, long> locations =
+                    new Dictionary<string, long>(
+                        StringComparer.OrdinalIgnoreCase
+                    );
+                foreach (string locationName in locationNames)
+                {
+                    string canonicalLocationName =
+                        LocationSet.GetCanonicalLocationName(locationName);
+                    if (string.IsNullOrWhiteSpace(
+                            canonicalLocationName
+                        ) ||
+                        locations.ContainsKey(canonicalLocationName))
+                    {
+                        continue;
+                    }
+
+                    long locationId = GetLocationId(
+                        canonicalLocationName
+                    );
+                    if (locationId >= 0)
+                    {
+                        locations.Add(
+                            canonicalLocationName,
+                            locationId
+                        );
+                    }
+                    else
+                    {
+                        RandomizerPlugin.Log?.LogWarning(
+                            "[RANDOMIZER] Could not resolve shop/hint " +
+                            "location '" + canonicalLocationName +
+                            "' while scouting " + requestPurpose + "."
+                        );
+                    }
+                }
+
+                if (locations.Count == 0)
+                {
+                    return hints;
+                }
+
+                Dictionary<long, ScoutedItemInfo> result;
+                ArchipelagoSession requestSession;
+                string requestSeed;
+                int requestTeam;
+                int requestSlot;
+                requestSession = session;
+                requestSeed = RoomSeed;
+                requestTeam = Team;
+                requestSlot = Slot;
+                Task<Dictionary<long, ScoutedItemInfo>> scoutTask =
+                    requestSession.Locations.ScoutLocationsAsync(
+                        hintCreationPolicy,
+                        locations.Values.Distinct().ToArray()
+                    );
+                Task completedTask = await Task.WhenAny(
+                    scoutTask,
+                    Task.Delay(HintScoutTimeoutMilliseconds)
+                ).ConfigureAwait(false);
+                if (!ReferenceEquals(completedTask, scoutTask))
+                {
+                    scoutChannel.Poisoned = true;
+                    gateAcquired = false;
+                    _ = ObservePoisonedScoutAsync(
+                        scoutChannel,
+                        scoutTask
+                    );
+                    RandomizerPlugin.Log?.LogWarning(
+                        "[RANDOMIZER] Timed out scouting " +
+                        requestPurpose + ". Reconnect to Archipelago " +
+                        "before retrying so no scout responses can cross."
+                    );
+                    return hints;
+                }
+
+                result = await scoutTask.ConfigureAwait(false);
+                if (!IsSameHintSession(
+                    requestSession,
+                    requestSeed,
+                    requestTeam,
+                    requestSlot
+                ))
+                {
+                    return hints;
+                }
+
+                if (result == null)
+                {
+                    return hints;
+                }
+
+                foreach (KeyValuePair<string, long> location in locations)
+                {
+                    if (result.TryGetValue(
+                            location.Value,
+                            out ScoutedItemInfo info
+                        ) &&
+                        info != null)
+                    {
+                        hints[location.Key] = CreateHintData(
+                            location.Key,
+                            info
+                        );
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                RandomizerPlugin.Log?.LogWarning(
+                    "[RANDOMIZER] Failed to scout " + requestPurpose +
+                    ": " + ex.Message
+                );
+            }
+            finally
+            {
+                if (gateAcquired)
+                {
+                    scoutChannel.Gate.Release();
+                }
+            }
+
+            return hints;
+        }
+
+        private static async Task ObservePoisonedScoutAsync(
+            HintScoutChannel scoutChannel,
+            Task<Dictionary<long, ScoutedItemInfo>> scoutTask
+        )
+        {
+            try
+            {
+                await scoutTask.ConfigureAwait(false);
+            }
+            catch
+            {
+                // The timed-out request is detached. Observe a
+                // later fault so it cannot become an unobserved task exception.
+            }
+            finally
+            {
+                // The channel remains poisoned after the request settles.
+                // MultiClient.Net 6.7.1 owns one scout callback per session.
+                // Only reconnecting and replacing the channel is unambiguous.
+                scoutChannel.Gate.Release();
+            }
+        }
+
+        private bool IsSameHintSession(
+            ArchipelagoSession requestSession,
+            string requestSeed,
+            int requestTeam,
+            int requestSlot
+        )
+        {
+            return Connected &&
+                   ReferenceEquals(requestSession, session) &&
+                   string.Equals(
+                       requestSeed,
+                       RoomSeed,
+                       StringComparison.Ordinal
+                   ) &&
+                   requestTeam == Team &&
+                   requestSlot == Slot;
+        }
+
+        private HintData CreateHintData(
+            string locationName,
+            ScoutedItemInfo info
+        )
+        {
+            string itemName = string.IsNullOrWhiteSpace(info.ItemName)
+                ? info.ItemDisplayName
+                : info.ItemName;
+            if (info.Player != null &&
+                string.Equals(
+                    info.Player.Game,
+                    configuredGameName,
+                    StringComparison.Ordinal))
+            {
+                itemName = ItemSet.GetCanonicalItemName(itemName);
+            }
+
+            string userName = null;
+            if (info.Player != null)
+            {
+                userName = string.IsNullOrWhiteSpace(info.Player.Alias)
+                    ? info.Player.Name
+                    : info.Player.Alias;
+            }
+
+            return new HintData
+            {
+                locationName = locationName,
+                user = userName,
+                item = itemName,
+                flags = info.Flags
+            };
+        }
+
+        private void TrackOfficialHints()
+        {
+            ArchipelagoSession trackedSession = session;
+            string trackedSeed = RoomSeed;
+            int trackedTeam = Team;
+            int trackedSlot = Slot;
+            trackedSession.DataStorage.TrackHints(
+                hints =>
+                {
+                    if (hints == null || !IsSameHintSession(
+                            trackedSession,
+                            trackedSeed,
+                            trackedTeam,
+                            trackedSlot
+                        ))
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        HintData[] update = hints
+                            .Where(hint => hint != null &&
+                                hint.FindingPlayer == trackedSlot)
+                            .Select(hint => ConvertOfficialHint(
+                                trackedSession,
+                                hint
+                            ))
+                            .Where(hint => hint != null)
+                            .ToArray();
+                        if (update.Length == 0)
+                        {
+                            return;
+                        }
+
+                        lock (stateLock)
+                        {
+                            if (IsSameHintSession(
+                                    trackedSession,
+                                    trackedSeed,
+                                    trackedTeam,
+                                    trackedSlot
+                                ))
+                            {
+                                trackedHintUpdates.Enqueue(update);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        RandomizerPlugin.Log?.LogWarning(
+                            "[RANDOMIZER] Could not queue server hints: " +
+                            ex.Message
+                        );
+                    }
+                },
+                true,
+                trackedSlot,
+                trackedTeam
+            );
+        }
+
+        internal void ImportTrackedHints()
+        {
+            lock (stateLock)
+            {
+                if (trackedHintUpdates.Count == 0)
+                {
+                    return;
+                }
+            }
+
+            if (!Connected)
+            {
+                return;
+            }
+
+            SaveState saveState = SaveState.Instance;
+            if (saveState == null ||
+                (saveState.IsRoomBound && !saveState.MatchesRoom(this)))
+            {
+                return;
+            }
+
+            List<HintData> updates;
+            lock (stateLock)
+            {
+                if (trackedHintUpdates.Count == 0)
+                {
+                    return;
+                }
+
+                updates = new List<HintData>();
+                while (trackedHintUpdates.Count > 0)
+                {
+                    updates.AddRange(trackedHintUpdates.Dequeue());
+                }
+            }
+
+            foreach (HintData hint in updates)
+            {
+                saveState.CacheHint(hint);
+            }
+        }
+
+        internal bool CreateOfficialHint(string locationName)
+        {
+            if (!Connected || string.IsNullOrWhiteSpace(locationName))
+            {
+                return false;
+            }
+
+            string canonical =
+                LocationSet.GetCanonicalLocationName(locationName);
+            long locationId = GetLocationId(canonical);
+            if (locationId < 0)
+            {
+                return false;
+            }
+
+            try
+            {
+                session.Hints.CreateHints(
+                    HintStatus.Unspecified,
+                    new[] { locationId }
+                );
+                return true;
+            }
+            catch (Exception ex)
+            {
+                RandomizerPlugin.Log?.LogWarning(
+                    "[RANDOMIZER] Could not announce Vog hint: " +
+                    ex.Message
+                );
+                return false;
+            }
+        }
+
+        private HintData ConvertOfficialHint(
+            ArchipelagoSession sourceSession,
+            Hint hint
+        )
+        {
+            if (sourceSession == null || hint == null)
+            {
+                return null;
+            }
+
+            PlayerInfo receivingPlayer =
+                sourceSession.Players.GetPlayerInfo(
+                    hint.ReceivingPlayer
+                );
+            string receivingGame = receivingPlayer == null
+                ? configuredGameName
+                : receivingPlayer.Game;
+            string locationName =
+                sourceSession.Locations.GetLocationNameFromId(
+                    hint.LocationId,
+                    configuredGameName
+                );
+            if (string.IsNullOrWhiteSpace(locationName))
+            {
+                return null;
+            }
+
+            string userName = sourceSession.Players.GetPlayerAlias(
+                hint.ReceivingPlayer
+            );
+            string itemName = sourceSession.Items.GetItemName(
+                hint.ItemId,
+                receivingGame
+            );
+            if (string.Equals(
+                    receivingGame,
+                    configuredGameName,
+                    StringComparison.Ordinal
+                ))
+            {
+                itemName = ItemSet.GetCanonicalItemName(itemName);
+            }
+
+            return new HintData
+            {
+                locationName = locationName,
+                user = userName,
+                item = itemName,
+                flags = hint.ItemFlags,
+                official = true,
+                found = hint.Found,
+            };
+        }
+
+        internal IEnumerable<HintData> GetOfficialHintsForCurrentSlot()
+        {
+            if (!Connected || session == null ||
+                session.DataStorage == null)
+            {
+                return Array.Empty<HintData>();
+            }
+
+            try
+            {
+                return session.DataStorage.GetHints()
+                    .Where(hint => hint != null &&
+                        hint.FindingPlayer == Slot)
+                    .Select(hint => ConvertOfficialHint(session, hint))
+                    .Where(hint => hint != null)
+                    .ToArray();
+            }
+            catch (Exception ex)
+            {
+                RandomizerPlugin.Log?.LogWarning(
+                    "[RANDOMIZER] Could not import server hints: " +
+                    ex.Message
+                );
+                return Array.Empty<HintData>();
+            }
+        }
+    }
+}

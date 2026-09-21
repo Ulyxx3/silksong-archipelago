@@ -1,0 +1,649 @@
+using HarmonyLib;
+using System;
+using System.Reflection;
+using SetPlayerDataBoolAction =
+    HutongGames.PlayMaker.Actions.SetPlayerDataBool;
+
+namespace SilksongRandomizer.Patches
+{
+    internal static class BellShrinePatches
+    {
+        private const string GrandGateQuestName =
+            "Grand Gate Bellshrines";
+        private const string ActTwoStartedField = "act2Started";
+
+        private sealed class Entry
+        {
+            internal readonly string SceneName;
+            internal readonly string ObjectName;
+            internal readonly string PlayerDataFlag;
+            internal readonly string LocationName;
+
+            internal Entry(
+                string sceneName,
+                string objectName,
+                string playerDataFlag,
+                string locationName)
+            {
+                SceneName = sceneName;
+                ObjectName = objectName;
+                PlayerDataFlag = playerDataFlag;
+                LocationName = locationName;
+            }
+        }
+
+        private sealed class JudgeBell
+        {
+            internal readonly string PlayerDataFlag;
+            internal readonly string ItemName;
+
+            internal JudgeBell(string playerDataFlag, string itemName)
+            {
+                PlayerDataFlag = playerDataFlag;
+                ItemName = itemName;
+            }
+        }
+
+        private struct JudgeStateSnapshot
+        {
+            internal bool Applied;
+            internal PlayerData PlayerData;
+            internal bool[] NativeValues;
+        }
+
+        private static readonly Entry[] Entries =
+        {
+            new Entry(
+                "Bellshrine",
+                "Bellshrine Sequence",
+                "bellShrineBoneForest",
+                "The Marrow - Bellshrine"),
+            new Entry(
+                "Bellshrine_05",
+                "Bellshrine Sequence",
+                "bellShrineWilds",
+                "Deep Docks - Bellshrine"),
+            new Entry(
+                "Bellshrine_02",
+                "Bellshrine Sequence",
+                "bellShrineGreymoor",
+                "Greymoor - Bellshrine"),
+            new Entry(
+                "Bellshrine_03",
+                "Bellshrine Sequence",
+                "bellShrineShellwood",
+                "Shellwood - Bellshrine"),
+            new Entry(
+                "Belltown_Shrine",
+                "Bellshrine Sequence Bellhart",
+                "bellShrineBellhart",
+                "Bellhart - Bellshrine"),
+        };
+
+        // The Judge door checks these five shrine flags. Swap in AP bell
+        // ownership only while that door checks or animates its locks.
+        private static readonly JudgeBell[] JudgeBells =
+        {
+            new JudgeBell("bellShrineBoneForest", "Bell: The Marrow"),
+            new JudgeBell("bellShrineWilds", "Bell: Deep Docks"),
+            new JudgeBell("bellShrineGreymoor", "Bell: Greymoor"),
+            new JudgeBell("bellShrineShellwood", "Bell: Shellwood"),
+            new JudgeBell("bellShrineBellhart", "Bell: Bellhart"),
+        };
+
+        private static readonly (string SceneName, string ObjectName, int BellIndex)[] ShrineDoors =
+        {
+            ("Bellshrine", "bellshrine_gate_curved", 0),
+            ("Bone_03", "Bellshrine gate", 0),
+            ("Bellshrine_05", "bellshrine_gate_curved", 1),
+            ("Bone_East_02", "Bellshrine gate", 1),
+            ("Bellshrine_02", "bellshrine_gate_curved", 2),
+            ("Greymoor_01", "Bellshrine gate", 2),
+            ("Bellshrine_03", "bellshrine_gate_curved (1)", 3),
+            ("Shellwood_19", "Bellshrine gate (1)", 3),
+        };
+
+        private static readonly FieldInfo IsCompleteBoolField =
+            AccessTools.Field(typeof(StateChangeSequence), "isCompleteBool");
+
+        [HarmonyPatch(
+            typeof(SetPlayerDataBoolAction),
+            nameof(SetPlayerDataBoolAction.OnEnter)
+        )]
+        private static class ActTwoTitleCardPatch
+        {
+            [HarmonyPostfix]
+            private static void Postfix(SetPlayerDataBoolAction __instance)
+            {
+                if (__instance?.boolName == null ||
+                    __instance.value == null ||
+                    !__instance.value.Value ||
+                    !string.Equals(
+                        __instance.boolName.Value,
+                        ActTwoStartedField,
+                        StringComparison.Ordinal))
+                {
+                    return;
+                }
+
+                ReconcileGrandGateQuest();
+            }
+        }
+
+        [HarmonyPatch(typeof(StateChangeSequence), "SetIsCompleteBool")]
+        private static class SetIsCompleteBoolPatch
+        {
+            [HarmonyPostfix]
+            private static void Postfix(StateChangeSequence __instance)
+            {
+                ReportPhysicalCompletion(__instance);
+            }
+        }
+
+        [HarmonyPatch(typeof(StateChangeSequence), "CheckCompleteBool")]
+        private static class CheckCompleteBoolPatch
+        {
+            [HarmonyPostfix]
+            private static void Postfix(
+                StateChangeSequence __instance,
+                bool __result)
+            {
+                if (__result)
+                {
+                    // An older save may have a completed shrine whose AP check
+                    // was never sent.
+                    ReportPhysicalCompletion(__instance);
+                }
+            }
+        }
+
+        [HarmonyPatch]
+        private static class JudgeUpdateActivationPatch
+        {
+            private static MethodBase TargetMethod()
+            {
+                return AccessTools.Method(
+                    typeof(BellShrineGateLock),
+                    "UpdateActivation"
+                );
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPriority(Priority.First)]
+            private static void Prefix(out JudgeStateSnapshot __state)
+            {
+                ApplyJudgeBellOwnership(out __state);
+            }
+
+            [HarmonyFinalizer]
+            [HarmonyPriority(Priority.Last)]
+            private static Exception Finalizer(
+                Exception __exception,
+                JudgeStateSnapshot __state)
+            {
+                RestoreJudgeBellOwnership(__state);
+                return __exception;
+            }
+        }
+
+        [HarmonyPatch(typeof(BellShrineGateLock), "GetIsAllUnlocked")]
+        private static class JudgeGetIsAllUnlockedPatch
+        {
+            [HarmonyPrefix]
+            [HarmonyPriority(Priority.First)]
+            private static void Prefix(out JudgeStateSnapshot __state)
+            {
+                ApplyJudgeBellOwnership(out __state);
+            }
+
+            [HarmonyFinalizer]
+            [HarmonyPriority(Priority.Last)]
+            private static Exception Finalizer(
+                Exception __exception,
+                JudgeStateSnapshot __state)
+            {
+                RestoreJudgeBellOwnership(__state);
+                return __exception;
+            }
+        }
+
+        [HarmonyPatch]
+        private static class JudgePlayRoutineMoveNextPatch
+        {
+            private static MethodBase TargetMethod()
+            {
+                MethodInfo playRoutine = AccessTools.Method(
+                    typeof(BellShrineGateLock),
+                    "PlayRoutine"
+                );
+                return AccessTools.EnumeratorMoveNext(playRoutine);
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPriority(Priority.First)]
+            private static void Prefix(out JudgeStateSnapshot __state)
+            {
+                ApplyJudgeBellOwnership(out __state);
+            }
+
+            [HarmonyFinalizer]
+            [HarmonyPriority(Priority.Last)]
+            private static Exception Finalizer(
+                Exception __exception,
+                JudgeStateSnapshot __state)
+            {
+                RestoreJudgeBellOwnership(__state);
+                return __exception;
+            }
+        }
+
+        [HarmonyPatch(typeof(FullQuestBase), "get_CanComplete")]
+        private static class JudgeQuestCanCompletePatch
+        {
+            [HarmonyPrefix]
+            [HarmonyPriority(Priority.First)]
+            private static void Prefix(out JudgeStateSnapshot __state)
+            {
+                ApplyJudgeBellOwnership(out __state);
+            }
+
+            [HarmonyFinalizer]
+            [HarmonyPriority(Priority.Last)]
+            private static Exception Finalizer(
+                Exception __exception,
+                JudgeStateSnapshot __state)
+            {
+                RestoreJudgeBellOwnership(__state);
+                return __exception;
+            }
+        }
+
+        [HarmonyPatch(
+            typeof(InventoryItemQuest),
+            nameof(InventoryItemQuest.SetQuest),
+            new Type[] { typeof(BasicQuestBase), typeof(bool) }
+        )]
+        private static class JudgeQuestListSummaryPatch
+        {
+            [HarmonyPrefix]
+            [HarmonyPriority(Priority.First)]
+            private static void Prefix(out JudgeStateSnapshot __state)
+            {
+                ApplyJudgeBellOwnership(out __state);
+            }
+
+            [HarmonyFinalizer]
+            [HarmonyPriority(Priority.Last)]
+            private static Exception Finalizer(
+                Exception __exception,
+                JudgeStateSnapshot __state)
+            {
+                RestoreJudgeBellOwnership(__state);
+                return __exception;
+            }
+        }
+
+        [HarmonyPatch(typeof(FullQuestBase), nameof(FullQuestBase.GetDescription))]
+        private static class JudgeQuestDescriptionPatch
+        {
+            [HarmonyPrefix]
+            [HarmonyPriority(Priority.First)]
+            private static void Prefix(FullQuestBase __instance, out JudgeStateSnapshot __state)
+            {
+                __state = default;
+                if (__instance != null && __instance.name == GrandGateQuestName)
+                {
+                    ApplyJudgeBellOwnership(out __state);
+                }
+            }
+
+            [HarmonyFinalizer]
+            [HarmonyPriority(Priority.Last)]
+            private static Exception Finalizer(Exception __exception, JudgeStateSnapshot __state)
+            {
+                RestoreJudgeBellOwnership(__state);
+                return __exception;
+            }
+        }
+
+        [HarmonyPatch(typeof(QuestMapMarker), "IsActive")]
+        private static class JudgeQuestMapMarkerPatch
+        {
+            [HarmonyPrefix]
+            [HarmonyPriority(Priority.First)]
+            private static void Prefix(out JudgeStateSnapshot __state)
+            {
+                ApplyJudgeBellOwnership(out __state);
+            }
+
+            [HarmonyFinalizer]
+            [HarmonyPriority(Priority.Last)]
+            private static Exception Finalizer(
+                Exception __exception,
+                JudgeStateSnapshot __state)
+            {
+                RestoreJudgeBellOwnership(__state);
+                return __exception;
+            }
+        }
+
+        [HarmonyPatch(typeof(IconCounterItem), "OnEnable")]
+        private static class JudgeQuestIconPatch
+        {
+            [HarmonyPrefix]
+            [HarmonyPriority(Priority.First)]
+            private static void Prefix(out JudgeStateSnapshot __state)
+            {
+                ApplyJudgeBellOwnership(out __state);
+            }
+
+            [HarmonyFinalizer]
+            [HarmonyPriority(Priority.Last)]
+            private static Exception Finalizer(
+                Exception __exception,
+                JudgeStateSnapshot __state)
+            {
+                RestoreJudgeBellOwnership(__state);
+                return __exception;
+            }
+        }
+
+        [HarmonyPatch(typeof(DeactivateIfPlayerdataTrue), "ForceEvaluate")]
+        private static class ShrineExitActivationPatch
+        {
+            [HarmonyPrefix]
+            private static bool Prefix(DeactivateIfPlayerdataTrue __instance)
+            {
+                EnsureExitWatcher(__instance);
+                if (!TryGetRandomizedExit(__instance, out _))
+                {
+                    return true;
+                }
+
+                RefreshExit(__instance);
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(Gate), "Start")]
+        private static class ShrineExitStartPatch
+        {
+            [HarmonyPostfix]
+            private static void Postfix(Gate __instance)
+            {
+                var activation = __instance.GetComponent<DeactivateIfPlayerdataTrue>();
+                EnsureExitWatcher(activation);
+                RefreshExit(activation);
+            }
+        }
+
+        private static void EnsureExitWatcher(DeactivateIfPlayerdataTrue activation)
+        {
+            if (TryGetExit(activation, out _) &&
+                activation.GetComponent<BellShrineExitWatcher>() == null)
+            {
+                activation.gameObject.AddComponent<BellShrineExitWatcher>();
+            }
+        }
+
+        internal static void RefreshLoadedExits()
+        {
+            SaveState state = SaveState.Instance;
+            if (state == null || !state.IsRandomized(ItemType.BellShrine))
+            {
+                return;
+            }
+
+            foreach (var activation in UnityEngine.Object.FindObjectsByType<DeactivateIfPlayerdataTrue>(
+                UnityEngine.FindObjectsInactive.Include,
+                UnityEngine.FindObjectsSortMode.None))
+            {
+                EnsureExitWatcher(activation);
+                RefreshExit(activation);
+            }
+        }
+
+        [HarmonyPatch]
+        private static class ShrineExitPhysicalOpenPatch
+        {
+            private static MethodBase[] TargetMethods()
+            {
+                return new MethodBase[]
+                {
+                    AccessTools.Method(typeof(Gate), nameof(Gate.Open)),
+                    AccessTools.Method(typeof(Gate), nameof(Gate.Opened)),
+                };
+            }
+
+            [HarmonyPrefix]
+            private static bool Prefix(Gate __instance)
+            {
+                var activation = __instance.GetComponent<DeactivateIfPlayerdataTrue>();
+                if (!TryGetRandomizedExit(activation, out _))
+                {
+                    return true;
+                }
+
+                RefreshExit(activation);
+                return false;
+            }
+        }
+
+        internal static void RefreshExit(DeactivateIfPlayerdataTrue activation)
+        {
+            if (TryGetRandomizedExit(activation, out JudgeBell bell) &&
+                SaveState.Instance.receivedItems != null &&
+                SaveState.Instance.receivedItems.Contains(bell.ItemName))
+            {
+                activation.gameObject.SetActive(false);
+            }
+        }
+
+        private static bool TryGetRandomizedExit(
+            DeactivateIfPlayerdataTrue activation,
+            out JudgeBell bell)
+        {
+            bell = null;
+            SaveState state = SaveState.Instance;
+            return state != null && state.IsRandomized(ItemType.BellShrine) &&
+                   TryGetExit(activation, out bell);
+        }
+
+        private static bool TryGetExit(
+            DeactivateIfPlayerdataTrue activation,
+            out JudgeBell bell)
+        {
+            bell = null;
+            if (activation == null ||
+                activation.objectToDeactivate != null ||
+                activation.GetComponent<Gate>() == null)
+            {
+                return false;
+            }
+
+            foreach (var door in ShrineDoors)
+            {
+                JudgeBell candidate = JudgeBells[door.BellIndex];
+                if (activation.gameObject.scene.name == door.SceneName &&
+                    activation.name == door.ObjectName &&
+                    activation.boolName == candidate.PlayerDataFlag)
+                {
+                    bell = candidate;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static void ReportPhysicalCompletion(
+            StateChangeSequence sequence)
+        {
+            SaveState state = SaveState.Instance;
+            if (state == null ||
+                !TryGetEntry(sequence, out Entry entry) ||
+                !IsActive(state, entry.LocationName))
+            {
+                return;
+            }
+
+            state.CheckLocation(entry.LocationName);
+        }
+
+        internal static void ReconcileGrandGateQuest()
+        {
+            SaveState state = SaveState.Instance;
+            PlayerData playerData = PlayerData.instance;
+            GameManager gameManager = GameManager.SilentInstance;
+            if (state == null ||
+                !state.IsRoomBound ||
+                !state.IsRandomized(ItemType.BellShrine) ||
+                playerData == null ||
+                !playerData.act2Started ||
+                gameManager == null ||
+                gameManager.profileID < 0)
+            {
+                return;
+            }
+
+            FullQuestBase quest = QuestManager.GetQuest(
+                GrandGateQuestName
+            );
+            if (quest == null || quest.IsAccepted || quest.IsCompleted)
+            {
+                return;
+            }
+
+            quest.BeginQuest(null);
+            gameManager.QueueSaveGame();
+        }
+
+        private static void ApplyJudgeBellOwnership(
+            out JudgeStateSnapshot snapshot)
+        {
+            snapshot = default;
+            SaveState state = SaveState.Instance;
+            PlayerData playerData = PlayerData.instance;
+            if (state == null ||
+                playerData == null ||
+                !state.IsRandomized(ItemType.BellShrine))
+            {
+                return;
+            }
+
+            bool[] nativeValues = new bool[JudgeBells.Length];
+            for (int index = 0; index < JudgeBells.Length; index++)
+            {
+                nativeValues[index] = playerData.GetBool(
+                    JudgeBells[index].PlayerDataFlag
+                );
+            }
+
+            snapshot = new JudgeStateSnapshot
+            {
+                Applied = true,
+                PlayerData = playerData,
+                NativeValues = nativeValues,
+            };
+
+            try
+            {
+                for (int index = 0; index < JudgeBells.Length; index++)
+                {
+                    JudgeBell bell = JudgeBells[index];
+                    bool received = state.receivedItems != null &&
+                        state.receivedItems.Contains(bell.ItemName);
+                    playerData.SetBool(bell.PlayerDataFlag, received);
+                }
+            }
+            catch
+            {
+                RestoreJudgeBellOwnership(snapshot);
+                snapshot = default;
+                throw;
+            }
+        }
+
+        private static void RestoreJudgeBellOwnership(
+            JudgeStateSnapshot snapshot)
+        {
+            if (!snapshot.Applied ||
+                snapshot.PlayerData == null ||
+                snapshot.NativeValues == null)
+            {
+                return;
+            }
+
+            for (int index = 0; index < JudgeBells.Length; index++)
+            {
+                snapshot.PlayerData.SetBool(
+                    JudgeBells[index].PlayerDataFlag,
+                    snapshot.NativeValues[index]
+                );
+            }
+        }
+
+        private static bool IsActive(
+            SaveState state,
+            string locationName)
+        {
+            return state != null &&
+                   state.IsRandomized(ItemType.BellShrine) &&
+                   state.IsLocationEnabled(locationName) &&
+                   state.IsLocationInSeed(locationName);
+        }
+
+        private static bool TryGetEntry(
+            StateChangeSequence sequence,
+            out Entry entry)
+        {
+            entry = null;
+            if (sequence == null ||
+                sequence.gameObject == null ||
+                IsCompleteBoolField == null)
+            {
+                return false;
+            }
+
+            string sceneName = sequence.gameObject.scene.name;
+            string playerDataFlag =
+                IsCompleteBoolField.GetValue(sequence) as string;
+            foreach (Entry candidate in Entries)
+            {
+                if (string.Equals(
+                        sceneName,
+                        candidate.SceneName,
+                        StringComparison.Ordinal) &&
+                    string.Equals(
+                        sequence.name,
+                        candidate.ObjectName,
+                        StringComparison.Ordinal) &&
+                    string.Equals(
+                        playerDataFlag,
+                        candidate.PlayerDataFlag,
+                        StringComparison.Ordinal))
+                {
+                    entry = candidate;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    internal sealed class BellShrineExitWatcher : UnityEngine.MonoBehaviour
+    {
+        private DeactivateIfPlayerdataTrue activation;
+
+        private void Awake()
+        {
+            activation = GetComponent<DeactivateIfPlayerdataTrue>();
+        }
+
+        private void Update()
+        {
+            BellShrinePatches.RefreshExit(activation);
+        }
+    }
+
+}
